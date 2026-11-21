@@ -524,7 +524,7 @@ export default function SettingsPage() {
                       type="text"
                       value={customLinkText}
                       onChange={(e) => setCustomLinkText(e.target.value)}
-                      placeholder="e.g. /my-story or /category/dry-fish"
+                      placeholder="e.g. /my-story or /category/Milk"
                       className="w-full bg-white border border-brand/20 focus:border-[#C5A059]/50 rounded-xl px-4 py-3 text-xs font-semibold text-black outline-none transition-all mt-2 placeholder:text-black/30"
                     />
                   )}
@@ -725,7 +725,7 @@ export default function SettingsPage() {
                   type="text"
                   value={newOfferLink}
                   onChange={(e) => setNewOfferLink(e.target.value)}
-                  placeholder="e.g. /category/dry-fish"
+                  placeholder="e.g. /category/Milk"
                   className="w-full bg-brand/5 border border-transparent focus:border-[#C5A059]/50 rounded-2xl px-5 py-3.5 text-xs font-semibold text-black outline-none transition-all placeholder:text-black/20"
                 />
               </div>

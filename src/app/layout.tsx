@@ -24,13 +24,13 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Dry Fish Basket - Premium Dry Fish & Coastal Delicacies",
-  description: "Hygienically Prepared. Authentic Coastal Taste.",
+  title: "Hyderabad Delight Dairy - Pure Farm Fresh Milk, Desi Ghee & Fresh Dairy",
+  description: "ESTD 2008. Pure Buffalo Milk, Bilona A2 Desi Cow Ghee, Fresh Malai Paneer, Artisanal Butter & Farmhouse Curd delivered fresh across Hyderabad.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon.png", type: "image/png" },
-      { url: "/fav_icon_fin.jpeg", type: "image/jpeg" },
+      { url: "/logo.jpg", type: "image/jpeg" },
     ],
     shortcut: "/favicon.png",
     apple: "/favicon.png",

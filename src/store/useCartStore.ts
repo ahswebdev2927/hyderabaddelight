@@ -133,7 +133,7 @@ export const useCartStore = create<CartStore>()(
       },
     }),
     {
-      name: "dry-fish-basket-cart",
+      name: "hyderabad-delight-dairy-cart",
     }
   )
 );

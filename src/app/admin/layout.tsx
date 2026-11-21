@@ -82,11 +82,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="p-6 border-b border-white/5 flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-3 group" onClick={() => setIsMobileSidebarOpen(false)}>
             <div className="w-9 h-9 flex items-center justify-center bg-transparent group-hover:scale-105 transition-transform">
-              <img src="/logo_fin.png" alt="Dry Fish Basket Logo" className="w-full h-full object-contain" />
+              <img src="/logo.jpg" alt="Hyderabad Delight Dairy Logo" className="w-full h-full object-contain rounded-md" />
             </div>
             <div>
-              <h1 className="font-gabriola font-bold text-xl tracking-wide leading-none">Dry Fish Basket</h1>
-              <p className="text-[8px] uppercase tracking-[0.2em] text-[#C5A059] font-black mt-1">Admin Panel</p>
+              <h1 className="font-serif font-bold text-lg tracking-wide leading-none">Hyderabad Delight</h1>
+              <p className="text-[8px] uppercase tracking-[0.2em] text-[#3B82C4] font-black mt-1">Dairy Admin Panel</p>
             </div>
           </Link>
           <button 
@@ -147,9 +147,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="hidden md:flex absolute top-4 left-6 z-40 p-1 hover:bg-[#8c6239]/10 rounded-xl transition-all text-white cursor-pointer items-center justify-center animate-in fade-in duration-300"
           >
             <div className="relative w-8 h-8 group">
-              {/* Dry Fish Basket Logo Icon */}
+              {/* Hyderabad Delight Dairy Logo Icon */}
               <div className="absolute inset-0 bg-transparent flex items-center justify-center group-hover:scale-0 opacity-100 group-hover:opacity-0 transition-all duration-200">
-                <img src="/logo_fin.png" alt="Dry Fish Basket Logo" className="w-full h-full object-contain" />
+                <img src="/logo.jpg" alt="Hyderabad Delight Dairy Logo" className="w-full h-full object-contain rounded-md" />
               </div>
               {/* Dashboard Icon on hover */}
               <div className="absolute inset-0 scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 flex items-center justify-center bg-[#8c6239] text-white rounded-full transition-all duration-200">

@@ -193,7 +193,7 @@ export default function FAQSettingsPage() {
                   type="text"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
-                  placeholder="e.g. Is dry fish good for health?"
+                  placeholder="e.g. Is A2 cow milk good for children?"
                   className="w-full bg-white border border-[#8c6239]/15 rounded-xl px-4 py-3 text-xs font-bold text-black focus:outline-none focus:border-brand-accent placeholder:text-[#8c6239]/35 shadow-sm"
                 />
               </div>

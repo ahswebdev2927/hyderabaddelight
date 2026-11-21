@@ -47,15 +47,15 @@ export default function BlogsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FAF6ED] text-[#3b2314] font-sans selection:bg-[#8c6239]/20 pb-24">
+    <main className="min-h-screen bg-[#F4F8FC] text-[#1E242B] font-sans selection:bg-[#3B82C4]/20 pb-24">
       {/* Header */}
-      <section className="max-w-4xl mx-auto px-6 pt-16 pb-4 border-b border-[#8c6239]/10">
+      <section className="max-w-4xl mx-auto px-6 pt-16 pb-4 border-b border-[#3B82C4]/15">
         <div className="text-center max-w-2xl mx-auto space-y-4">
-          <h1 className="text-3xl md:text-5xl font-serif font-black text-[#8c6239] leading-tight">
-            Our Blog &amp; Recipes
+          <h1 className="text-3xl md:text-5xl font-serif font-black text-[#1E242B] leading-tight">
+            Our Dairy Blog &amp; Health Insights
           </h1>
           <p className="text-xs md:text-sm text-black/60 font-medium leading-relaxed">
-            Discover traditional dry fish recipes, culinary tips, and stories directly from the traditional coastal kitchens.
+            Discover the health benefits of A2 milk, traditional Vedic bilona ghee methods, and culinary tips from Hyderabad Delight Dairy.
           </p>
         </div>
       </section>

@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 
 export const metadata = {
-  title: "Shipping & Payment - Dry Fish Basket",
-  description: "Shipping options, delivery timelines, and secure payment methods at Dry Fish Basket.",
+  title: "Shipping & Payment - Hyderabad Delight Dairy",
+  description: "Morning delivery options, timelines, and payment methods at Hyderabad Delight Dairy.",
 };
 
 export default function ShippingPayment() {
@@ -163,17 +163,17 @@ export default function ShippingPayment() {
         </div>
 
         {/* Footer contact note */}
-        <div className="mt-16 text-center bg-[#FFFDF6] p-8 rounded-[2rem] border border-[#8c6239]/5 shadow-sm max-w-xl mx-auto">
-          <p className="text-sm text-[#8c6239]/60 font-semibold mb-2">Need help with ordering or weight options?</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-base font-bold text-[#8c6239]">
-            <a href="mailto:info@vkdryfishbasket.com" className="inline-flex items-center gap-2 text-[#C5A059] hover:underline">
+        <div className="mt-16 text-center bg-white p-8 rounded-[2rem] border border-[#3B82C4]/15 shadow-sm max-w-xl mx-auto">
+          <p className="text-sm text-black/60 font-semibold mb-2">Need help with morning delivery or dairy subscriptions?</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-base font-bold text-[#1E242B]">
+            <a href="mailto:care@hyderabaddelightdairy.com" className="inline-flex items-center gap-2 text-[#3B82C4] hover:underline">
               <Mail size={18} />
-              info@vkdryfishbasket.com
+              care@hyderabaddelightdairy.com
             </a>
-            <span className="hidden sm:inline text-[#8c6239]/20">|</span>
-            <div className="inline-flex items-center gap-2 text-[#8c6239]">
-              <Phone size={18} className="text-[#C5A059]" />
-              <span>+91 96115 26047</span>
+            <span className="hidden sm:inline text-black/20">|</span>
+            <div className="inline-flex items-center gap-2 text-[#1E242B]">
+              <Phone size={18} className="text-[#3B82C4]" />
+              <span>+91 98765 43210</span>
             </div>
           </div>
         </div>

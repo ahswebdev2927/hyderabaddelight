@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand: #8c6239;       /* Brand Primary: Warm Brown */
-  --color-brand-hover: #734f2d; /* Darker Brand Primary */
-  --color-brand-light: #FAF6ED; /* Warm Light Beige/Sand */
-  --color-brand-dark: #3b2314;  /* Deep Brown */
-  --color-brand-accent: #C5A059; /* Gold/Accent color */
+  --color-brand: #3B82C4;       /* Primary Dairy Blue from Logo */
+  --color-brand-hover: #2B6CB0; /* Richer Dairy Blue */
+  --color-brand-light: #F4F8FC; /* Fresh Dairy Milk Tint */
+  --color-brand-dark: #1E242B;  /* Heritage Charcoal Black from Logo */
+  --color-brand-accent: #E5A93C; /* Golden Ghee & Butter Accent */
+  --color-brand-green: #16A34A; /* Fresh Pasture Farm Green */
   --font-sans: var(--font-inter), sans-serif;
   --font-inter: var(--font-inter), sans-serif;
   --font-serif: var(--font-playfair), "Playfair Display", Georgia, serif;

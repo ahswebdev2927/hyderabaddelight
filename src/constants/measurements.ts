@@ -1,13 +1,26 @@
-export const MALE_MEASUREMENTS = [
-  "Neck", "Shoulder", "Sleeve Length", "Coat Length", "Chest", 
-  "Stomach", "Waist", "Hips", "Thigh", "Trouser Length", 
-  "Ankle", "Biceps", "Wrist", "Knee", "Just below Knee Cap", "Crotch (Aasan)"
+export const DAIRY_MEASUREMENTS = [
+  "250 ml",
+  "500 ml",
+  "1 Litre",
+  "2 Litres",
+  "5 Litres",
+  "100 g",
+  "200 g",
+  "250 g",
+  "500 g",
+  "1 kg",
+  "2 kg",
+  "5 kg",
 ];
 
-export const FEMALE_MEASUREMENTS = [
-  "NECK", "ACROSS FRONT", "BUST", "UNDER BUST", "WAIST CIRC.", 
-  "HIP CIRC.", "THIGH CIRC", "UPPER ARM CIRC.", "ELBOW CIRC.", 
-  "WRIST CIRC.", "SHOULDER TO WAIST", "SHOULDER TO FLOOR", 
-  "SHOULDER TO SHOULDER", "BACK NECK TO WAIST", "ACROSS BACK", 
-  "INNER ARM LENGTH", "ANKLE"
+export const DAIRY_CATEGORIES = [
+  "Milk",
+  "Ghee",
+  "Paneer",
+  "Butter",
+  "Curd",
 ];
+
+// Backwards-compatible aliases if any component references them
+export const MALE_MEASUREMENTS = DAIRY_MEASUREMENTS;
+export const FEMALE_MEASUREMENTS = DAIRY_MEASUREMENTS;

@@ -127,6 +127,8 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
   }, [parsedSpecs]);
 
 
+  // Wishlist handler - commented out for now
+  /*
   const handleWishlistClick = async () => {
     try {
       const sessionRes = await fetch("/api/auth/session", { cache: "no-store" });
@@ -146,6 +148,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
       await addItemToWishlist(Number(id));
     }
   };
+  */
 
   useEffect(() => {
     async function fetchProduct() {
@@ -155,16 +158,14 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
           const data = await res.json();
           setProduct(data);
 
-          // Set initial color and size if available
-          const uniqueColors = Array.from(new Set(data.variations.map((v: Variation) => v.color))) as string[];
-          if (uniqueColors.length > 0) {
-            const firstColor = uniqueColors[0] as string;
-            setSelectedColor(firstColor);
-
-            // Also set first size for that color
-            const firstSize = data.variations.find((v: Variation) => v.color === firstColor)?.size;
-            if (firstSize) setSelectedSize(firstSize);
+          // Initialize default packaging size (dairy items have weight/size variants)
+          const allSizes = Array.from(new Set(data.variations?.map((v: Variation) => v.size) || [])).filter(Boolean) as string[];
+          if (allSizes.length > 0) {
+            setSelectedSize(allSizes[0]);
+          } else {
+            setSelectedSize("Standard");
           }
+          setSelectedColor("default");
 
           // Set initial main image
           let initialImage = "/images/placeholder.png";
@@ -172,8 +173,6 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
             const parsed = JSON.parse(data.images || "[]");
             if (Array.isArray(parsed)) {
               if (parsed.length > 0) initialImage = parsed[0];
-            } else if (uniqueColors.length > 0 && parsed[uniqueColors[0]] && parsed[uniqueColors[0]].length > 0) {
-              initialImage = parsed[uniqueColors[0]][0];
             } else if (parsed["Default"] && parsed["Default"].length > 0) {
               initialImage = parsed["Default"][0];
             } else {
@@ -245,30 +244,17 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
 
   const variations = product.variations || [];
 
-  // Get unique colors available for this product
-  const availableColors = Array.from(new Set(variations.map(v => v.color))).filter(Boolean);
+  // Dairy variations are based on packaging weight / volumetric size
+  const availableSizes = Array.from(new Set(variations.map(v => v.size))).filter(Boolean) as string[];
 
-  // Get sizes available for the selected color
-  const sizesForColor = variations.filter(v => v.color === selectedColor);
-  const availableSizes = Array.from(new Set(sizesForColor.map(v => v.size)));
+  const isSingleSize = availableSizes.length <= 1;
 
-  const isSingleSize = availableSizes.length === 1 && (
-    availableSizes[0] === "Standard" || 
-    availableSizes[0] === "One Size" || 
-    availableSizes[0] === "No Size" || 
-    availableSizes[0] === "Default"
-  );
+  // Active selected variation (matched by size, fallback to first variation)
+  const currentVariation = variations.find(v => v.size === selectedSize) || (variations.length > 0 ? variations[0] : null);
 
-  // Current selected variation
-  const currentVariation = variations.find(
-    v => v.color === selectedColor && v.size === selectedSize
-  );
-
-  const displayPrice = currentVariation?.salePrice || product.salePrice || product.basePrice;
+  const displayPrice = currentVariation?.salePrice || currentVariation?.mrp || product.salePrice || product.basePrice;
   const mrp = currentVariation?.mrp || product.basePrice;
-  const currentStock = currentVariation?.stock || 0;
-
-  const enabledMeasurementsList = JSON.parse(product.enabledMeasurements || "[]") as string[];
+  const currentStock = currentVariation?.stock ?? 100;
 
   const handleDecrement = () => {
     setQuantity((prev) => Math.max(1, prev - 1));
@@ -283,54 +269,28 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
     }
   };
 
-  const handleAddToCart = async () => {
-    try {
-      const sessionRes = await fetch("/api/auth/session", { cache: "no-store" });
-      const sessionData = await sessionRes.json();
-      if (!sessionData.authenticated) {
-        window.location.href = `/login?redirect=${encodeURIComponent(pathname)}`;
-        return;
-      }
-    } catch (err) {
-      window.location.href = `/login?redirect=${encodeURIComponent(pathname)}`;
-      return;
-    }
-
-    if (!selectedColor) {
-      setToast("Please select a color first");
-      return;
-    }
-    if (!selectedSize) {
-      setToast("Please select a size first");
-      return;
-    }
-    if (!currentVariation) {
-      setToast("The selected combination is currently unavailable.");
-      return;
-    }
-    if (quantity > currentStock) {
-      setToast(`Only ${currentStock} items available in stock`);
-      return;
-    }
+  const handleAddToCart = () => {
+    const activeSize = selectedSize || (availableSizes.length > 0 ? availableSizes[0] : "Standard");
+    const activePrice = displayPrice;
 
     addItem({
-      id: `prod_${product.id}_${selectedColor}_${selectedSize}`,
+      id: `prod_${product.id}_${activeSize}`,
       productId: product.id,
       name: product.name,
-      price: displayPrice,
-      image: mainImage,
+      price: activePrice,
+      image: mainImage || "/images/placeholder.png",
       quantity: quantity,
-      size: selectedSize,
-      color: selectedColor,
+      size: activeSize,
+      color: "default",
       customizations: null
     });
 
     setAdded(true);
-    setToast("Item successfully added to bag!");
+    setToast("Item successfully added to cart!");
     setTimeout(() => {
       setAdded(false);
       setToast("");
-    }, 3000);
+    }, 2500);
   };
 
   return (
@@ -421,8 +381,8 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                 </span>
                 <div className="flex flex-wrap gap-2.5">
                   {availableSizes.map((size) => {
-                    const variation = variations.find(v => v.color === selectedColor && v.size === size);
-                    const isOutOfStock = variation ? variation.stock === 0 : true;
+                    const variation = variations.find(v => v.size === size);
+                    const isOutOfStock = variation ? variation.stock <= 0 : false;
 
                     return (
                       <button
@@ -434,10 +394,10 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                         }}
                         className={`px-5 py-2.5 rounded-xl flex items-center justify-center text-xs font-black transition-all border-2 cursor-pointer ${
                           selectedSize === size
-                            ? "bg-[#8c6239] text-[#FAF6ED] border-[#8c6239] scale-105 shadow-md"
+                            ? "bg-[#3B82C4] text-white border-[#3B82C4] scale-105 shadow-md"
                             : isOutOfStock
                               ? "bg-brand/5 text-black/20 border-transparent cursor-not-allowed line-through opacity-50"
-                              : "bg-white text-black border-[#8c6239]/20 hover:bg-[#8c6239]/5 shadow-sm"
+                              : "bg-white text-black border-[#3B82C4]/20 hover:bg-[#3B82C4]/10 shadow-sm"
                         }`}
                       >
                         {size}
@@ -454,12 +414,12 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                 Select Quantity
               </span>
               <div className="flex items-center gap-3">
-                <div className="flex items-center border border-[#8c6239]/20 rounded-xl bg-white p-1">
+                <div className="flex items-center border border-[#3B82C4]/20 rounded-xl bg-white p-1">
                   <button
                     type="button"
                     onClick={handleDecrement}
                     disabled={quantity <= 1}
-                    className="w-9 h-9 flex items-center justify-center text-base font-bold text-black/70 hover:bg-[#8c6239]/5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed select-none focus:outline-none cursor-pointer"
+                    className="w-9 h-9 flex items-center justify-center text-base font-bold text-black/70 hover:bg-[#3B82C4]/10 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed select-none focus:outline-none cursor-pointer"
                   >
                     -
                   </button>
@@ -470,7 +430,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                     type="button"
                     onClick={handleIncrement}
                     disabled={quantity >= currentStock}
-                    className="w-9 h-9 flex items-center justify-center text-base font-bold text-black/70 hover:bg-[#8c6239]/5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed select-none focus:outline-none cursor-pointer"
+                    className="w-9 h-9 flex items-center justify-center text-base font-bold text-black/70 hover:bg-[#3B82C4]/10 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed select-none focus:outline-none cursor-pointer"
                   >
                     +
                   </button>
@@ -483,15 +443,15 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
               </div>
             </div>
 
-            {/* 6. Buttons: Add to Cart and Wishlist */}
+            {/* 6. Buttons: Add to Cart */}
             <div className="flex flex-col sm:flex-row gap-3 items-center w-full mt-auto">
               <button
-                disabled={!!(selectedColor && selectedSize && currentStock === 0)}
+                disabled={currentStock <= 0}
                 onClick={handleAddToCart}
-                className={`w-full sm:flex-1 flex items-center justify-center space-x-3 font-bold py-3.5 rounded-xl transition-all text-sm cursor-pointer shadow-md ${
-                  selectedColor && selectedSize && currentStock === 0
-                    ? "bg-brand/10 text-black/30 cursor-not-allowed"
-                    : "bg-[#8c6239] text-[#FAF6ED] hover:bg-[#734f2d] active:scale-[0.98] border border-transparent shadow-[#8c6239]/10"
+                className={`w-full flex items-center justify-center space-x-3 font-bold py-4 rounded-xl transition-all text-sm cursor-pointer shadow-md ${
+                  currentStock <= 0
+                    ? "bg-black/10 text-black/30 cursor-not-allowed"
+                    : "bg-[#3B82C4] text-white hover:bg-[#2B6CB0] active:scale-[0.98] border border-transparent shadow-[#3B82C4]/20"
                 }`}
               >
                 {added ? (
@@ -500,18 +460,21 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                   <ShoppingBag size={18} className="transition-all text-white" />
                 )}
                 <span>
-                  {selectedColor && selectedSize && currentStock === 0 ? "Out of Stock" : added ? "Added!" : "Add to cart"}
+                  {currentStock <= 0 ? "Out of Stock" : added ? "Added to Cart!" : "Add to Cart"}
                 </span>
               </button>
+
+              {/* Wishlist Button - commented out for now
               <button
                 type="button"
                 onClick={handleWishlistClick}
-                className="w-full sm:flex-1 flex items-center justify-center space-x-3 font-bold py-3.5 rounded-xl transition-all text-sm cursor-pointer shadow-md bg-white text-black border border-[#8c6239]/30 hover:bg-[#8c6239]/5 active:scale-[0.98]"
+                className="w-full sm:flex-1 flex items-center justify-center space-x-3 font-bold py-3.5 rounded-xl transition-all text-sm cursor-pointer shadow-md bg-white text-black border border-[#3B82C4]/30 hover:bg-[#3B82C4]/5 active:scale-[0.98]"
                 title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
               >
                 <Heart className={`w-4 h-4 transition-colors ${isWishlisted ? "fill-red-500 text-red-500 animate-pulse" : "text-black/70"}`} />
                 <span>{isWishlisted ? "Wishlisted" : "Add to Wishlist"}</span>
               </button>
+              */}
             </div>
 
             {/* Accordions */}

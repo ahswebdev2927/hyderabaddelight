@@ -236,7 +236,7 @@ export default function AdminBlogsPage() {
           </div>
           <h3 className="text-lg font-bold text-black mb-2">No Blog Posts Yet</h3>
           <p className="text-black/40 mb-6 text-xs leading-relaxed max-w-sm mx-auto">
-            Share news, recipe guides, and stories about traditional dry fish recipes with your storefront buyers.
+            Share news, recipe guides, and stories about fresh farm milk, A2 cow ghee, and healthy dairy recipes with your storefront buyers.
           </p>
           <button
             onClick={handleOpenAddForm}
@@ -348,7 +348,7 @@ export default function AdminBlogsPage() {
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Traditional way to sun-dry dry prawns"
+                  placeholder="e.g. Traditional Vedic Bilona Ghee Preparation"
                   className="w-full bg-brand/5 border border-transparent focus:border-[#C5A059]/50 rounded-2xl px-5 py-4 text-sm font-semibold text-black outline-none transition-all placeholder:text-black/20"
                   required
                 />

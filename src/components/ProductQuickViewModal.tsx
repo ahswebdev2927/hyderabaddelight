@@ -121,6 +121,8 @@ export default function ProductQuickViewModal({ isOpen, onClose, product }: Prod
   const handleAddToCart = async () => {
     setIsAddingToCart(true);
 
+    // Customer login check bypassed for seamless guest shopping (can be restored here if needed)
+    /*
     try {
       const sessionRes = await fetch("/api/auth/session", { cache: "no-store" });
       const sessionData = await sessionRes.json();
@@ -132,6 +134,7 @@ export default function ProductQuickViewModal({ isOpen, onClose, product }: Prod
       window.location.href = `/login?redirect=${encodeURIComponent(pathname)}`;
       return;
     }
+    */
 
     try {
       const itemSize = selectedVariation?.size || selectedWeight || "Default";
@@ -159,8 +162,8 @@ export default function ProductQuickViewModal({ isOpen, onClose, product }: Prod
     }
   };
 
-  const productDescription = currentProduct.description || "Packed with authentic coastal flavor. Hygienically processed and traditional sun-dried.";
-  const productCategory = currentProduct.category || "Dry Fish";
+  const productDescription = currentProduct.description || "Farm fresh, pure and unadulterated dairy from Hyderabad Delight Dairy. Handcrafted with traditional purity.";
+  const productCategory = currentProduct.category || "Fresh Dairy";
   const variationsList: Variation[] = currentProduct.variations || [];
 
   return (
@@ -169,7 +172,7 @@ export default function ProductQuickViewModal({ isOpen, onClose, product }: Prod
       <div className="absolute inset-0 cursor-pointer" onClick={onClose} />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-4xl max-h-[92vh] bg-[#FAF6ED] rounded-3xl shadow-2xl border border-[#8c6239]/20 overflow-hidden flex flex-col md:flex-row z-10 animate-in zoom-in-95 duration-200 font-sans">
+      <div className="relative w-full max-w-4xl max-h-[92vh] bg-white rounded-3xl shadow-2xl border border-[#3B82C4]/20 overflow-hidden flex flex-col md:flex-row z-10 animate-in zoom-in-95 duration-200 font-sans">
         
         {/* Close Button */}
         <button
@@ -233,10 +236,11 @@ export default function ProductQuickViewModal({ isOpen, onClose, product }: Prod
               </div>
             )}
 
-            {/* Favorite Wishlist Icon */}
+            {/* Favorite Wishlist Icon - commented out for now
             <button className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 text-black hover:text-red-500 transition-colors shadow-md">
               <Heart size={18} />
             </button>
+            */}
           </div>
 
           {/* Thumbnails Row */}

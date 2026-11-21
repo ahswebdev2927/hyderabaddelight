@@ -7,6 +7,7 @@ import ProductCard from "@/components/ProductCard";
 import ReelsCarouselSection from "@/components/ReelsCarouselSection";
 import CategoryCarousel from "@/components/CategoryCarousel";
 import ReviewsCarousel from "@/components/ReviewsCarousel";
+import HeroBanner from "@/components/HeroBanner";
 import { getFirstProductImageUrl, getProductImageUrls } from "@/utils/product";
 
 type NavItem = {
@@ -92,30 +93,9 @@ export default function Home() {
     }
   };
 
-  // Show landing video only on initial session arrival, not on reload
+  // Preloader / Landing video overlay is disconnected as per user request (kept commented for future use)
   useEffect(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const isDismissed = document.documentElement.classList.contains("landing-dismissed");
-
-        if (isDismissed) {
-          // Reload / revisit: no landing video, play home video directly from 0:00
-          setShowLandingVideo(false);
-          startHomeVideoFromBeginning();
-          return;
-        }
-
-        // First visit in this session: display landing video
-        setShowLandingVideo(true);
-        if (videoRef.current) {
-          videoRef.current.pause();
-          videoRef.current.currentTime = 0;
-        }
-      }
-    } catch (e) {
-      setShowLandingVideo(false);
-      startHomeVideoFromBeginning();
-    }
+    setShowLandingVideo(false);
   }, []);
 
   // Auto-play landing video when visible
@@ -335,10 +315,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-brand-light text-black font-sans selection:bg-brand-accent/30 relative">
-      {/* Full-screen Video Landing Page Overlay with Parallel Background Preload */}
+      {/* Preloader Video Overlay - disconnected as per user request (kept commented for future use)
       <AnimatePresence
         onExitComplete={() => {
-          // Landing overlay has finished exiting and homepage is now fully opened
           startHomeVideoFromBeginning();
         }}
       >
@@ -365,25 +344,10 @@ export default function Home() {
           </motion.div>
         )}
       </AnimatePresence>
+      */}
 
-      {/* Static Home Video Banner */}
-      <div className="w-full relative overflow-hidden border-b border-brand/10 group mt-0 bg-[#FAF6ED]">
-        <div className="relative w-full h-auto aspect-video md:h-[calc(100vh-4rem)] md:max-h-[800px] overflow-hidden bg-[#FAF6ED] flex items-center justify-center">
-          <video
-            ref={videoRef}
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster="/images/home-banner-poster.jpg"
-            className="w-full h-full object-cover"
-          >
-            <source src="/videos/home-banner.mp4" type="video/mp4" />
-            <source src="/videos/WhatsApp%20Video%202026-09-04%20at%202.00.20%20PM.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      </div>
+      {/* Dynamic Responsive Hero Banner Carousel */}
+      <HeroBanner />
 
       {/* 2.5. Categories Section (Auto-scrolls, pauses on hover, supports manual scroll, drag, & arrow buttons) */}
       {!isLoading && categoryMarqueeItems.length > 0 && (
@@ -395,11 +359,11 @@ export default function Home() {
         <ProductGrid />
 
         {/* 2.5 Brand Feature Banner (Banner 2) */}
-        <section className="w-full mx-auto my-10 rounded-3xl overflow-hidden shadow-sm border border-[#8c6239]/15 bg-[#FAF6ED] transition-all hover:shadow-md">
+        <section className="w-full mx-auto my-10 rounded-3xl overflow-hidden shadow-sm border border-[#3B82C4]/20 bg-white transition-all hover:shadow-md">
           <div className="w-full relative">
             <img
               src="/images/banner_2.png"
-              alt="Brand Quality & Heritage Features"
+              alt="Hyderabad Delight Dairy Quality &amp; Heritage Features"
               className="w-full h-auto object-contain block"
             />
           </div>
@@ -415,7 +379,7 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="flex flex-col items-start mb-8 pb-2"
             >
-              <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#3b2314]">
+              <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#1E242B]">
                 Latest Arrivals
               </h2>
             </motion.div>
@@ -455,10 +419,10 @@ export default function Home() {
 
         {/* Founder Promotion Section */}
         {founderPromoList.length > 0 && (
-          <section className="w-full mx-auto my-8 border-t border-[#8c6239]/10 pt-8 animate-in fade-in duration-500">
+          <section className="w-full mx-auto my-8 border-t border-[#3B82C4]/15 pt-8 animate-in fade-in duration-500">
             <div className="flex flex-col items-center text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-serif font-black text-[#3b2314]">Our Mission &amp; Purpose</h2>
-              <p className="text-xs text-black/50 font-bold tracking-tight mt-2 uppercase tracking-[0.15em]">Delivering authentic dry fish traditions</p>
+              <h2 className="text-3xl md:text-4xl font-serif font-black text-[#1E242B]">Our Mission &amp; Purity Promise</h2>
+              <p className="text-xs text-[#3B82C4] font-bold tracking-tight mt-2 uppercase tracking-[0.15em]">Delivering Pure Farm-Fresh Dairy Across Hyderabad Since 2008</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {founderPromoList.map((card, idx) => (
@@ -467,7 +431,7 @@ export default function Home() {
                   className="flex flex-col items-center text-center space-y-4"
                 >
                   {card.imageUrl && (
-                    <div className="w-full aspect-[4/3] rounded-[2rem] overflow-hidden shadow-sm border border-[#8c6239]/10">
+                    <div className="w-full aspect-[4/3] rounded-[2rem] overflow-hidden shadow-sm border border-[#3B82C4]/15">
                       <img
                         src={card.imageUrl}
                         alt={`Founder promotion feature ${idx + 1}`}
@@ -481,7 +445,7 @@ export default function Home() {
                   )}
                   {card.text && (
                     <p
-                      className="text-xs md:text-sm text-[#3b2314] leading-relaxed font-semibold px-2"
+                      className="text-xs md:text-sm text-[#1E242B] leading-relaxed font-semibold px-2"
                       dangerouslySetInnerHTML={{ __html: card.text }}
                     />
                   )}
@@ -503,7 +467,7 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="flex flex-col items-center text-center mb-8"
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-black text-[#3b2314] tracking-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-black text-[#1E242B] tracking-tight">
                 See What Our Customers Say About Us
               </h2>
             </motion.div>
@@ -525,7 +489,7 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="flex flex-col items-center text-center mb-12"
             >
-              <h2 className="text-3xl md:text-4xl font-serif font-black text-[#3b2314]">Frequently asked questions</h2>
+              <h2 className="text-3xl md:text-4xl font-serif font-black text-[#1E242B]">Frequently asked questions</h2>
             </motion.div>
 
             <div className="max-w-4xl mx-auto space-y-4">
@@ -544,14 +508,14 @@ function FAQItem({ faq }: { faq: any }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-b border-[#3b2314]/10 py-4 transition-all duration-300">
+    <div className="border-b border-gray-200 py-4 transition-all duration-300">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center text-left text-black/85 hover:text-[#8c6239] transition-colors focus:outline-none py-2 group cursor-pointer"
+        className="w-full flex justify-between items-center text-left text-[#1E242B] hover:text-[#3B82C4] transition-colors focus:outline-none py-2 group cursor-pointer"
       >
         <span className="text-xs md:text-sm font-semibold tracking-wide">{faq.question}</span>
         <svg 
-          className={`w-3.5 h-3.5 text-black/50 group-hover:text-[#8c6239] transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} 
+          className={`w-3.5 h-3.5 text-gray-400 group-hover:text-[#3B82C4] transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} 
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"

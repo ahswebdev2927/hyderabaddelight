@@ -240,15 +240,15 @@ export default function Login() {
 
       <div className="w-full max-w-md bg-white border border-brand/10 rounded-2xl p-10 shadow-2xl border-t-8 border-t-brand-accent transform transition-all">
         <div className="text-center mb-10">
-          <div className="w-16 h-16 mx-auto mb-6 flex items-center justify-center bg-transparent hover:scale-105 transition-transform duration-300">
+          <div className="w-20 h-20 mx-auto mb-6 flex items-center justify-center bg-transparent hover:scale-105 transition-transform duration-300">
             <img
-              src="/logo_fin.png"
-              alt="Dry Fish Basket Logo"
-              className="w-full h-full object-contain"
+              src="/logo.jpg"
+              alt="Hyderabad Delight Dairy Logo"
+              className="w-full h-full object-contain rounded-xl"
             />
           </div>
-          <h2 className="text-3xl font-playfair font-bold text-black mb-3">
-            {step === "profile" ? "Welcome to Dry Fish Basket" : "Sign In"}
+          <h2 className="text-2xl sm:text-3xl font-playfair font-bold text-black mb-3">
+            {step === "profile" ? "Welcome to Hyderabad Delight Dairy" : "Sign In"}
           </h2>
           <p className="text-black/60 text-sm leading-relaxed px-4">
             {step === "phone" && "Enter your 10-digit mobile number to access your account."}
@@ -390,7 +390,7 @@ export default function Login() {
       </div>
 
       <p className="mt-10 text-center text-[10px] text-black/40 max-w-xs leading-relaxed uppercase tracking-widest font-bold">
-        Secure login powered by Dry Fish Basket. By continuing, you agree to our{" "}
+        Secure login powered by Hyderabad Delight Dairy. By continuing, you agree to our{" "}
         <Link href="/terms-conditions" className="text-black hover:underline">
           Terms
         </Link>{" "}

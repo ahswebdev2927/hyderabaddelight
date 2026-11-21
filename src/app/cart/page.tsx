@@ -3,8 +3,9 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Loader2, CreditCard, ShieldCheck, CheckCircle2, Scissors, Sparkles, MapPin, AlertTriangle, ChevronDown, X, Ticket } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Loader2, CreditCard, ShieldCheck, CheckCircle2, Sparkles, MapPin, AlertTriangle, ChevronDown, X, Ticket, MessageCircle, Phone, Truck, Check } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { checkPincodeServiceability, PincodeCheckResult } from "@/utils/pincode";
 
 function CartContent() {
   const { items, updateQuantity, removeItem, getTotalPrice, getTotalItems, clearCart, setQuantity, updateItemVariant } = useCartStore();
@@ -13,23 +14,48 @@ function CartContent() {
   const [loadingDetails, setLoadingDetails] = useState(true);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const [paymentStep, setPaymentStep] = useState<"agreement" | "address" | "details" | "processing">("agreement");
-  const [savedAddresses, setSavedAddresses] = useState<string[]>([]);
-  const [showNewAddressForm, setShowNewAddressForm] = useState(false);
-  const [selectedAddressIndex, setSelectedAddressIndex] = useState<number | null>(null);
-  const [fetchingAddress, setFetchingAddress] = useState(false);
-  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [bookingSuccessData, setBookingSuccessData] = useState<{
+    orderId: number;
+    whatsappUrl: string;
+    totalAmount: number;
+    deliverySlot: string;
+    customerName: string;
+    pincode: string;
+    areaName?: string;
+  } | null>(null);
+  const [pincodeStatus, setPincodeStatus] = useState<PincodeCheckResult | null>(null);
   const [address, setAddress] = useState({
     fullName: "",
     street: "",
-    city: "",
-    state: "",
+    city: "Hyderabad",
+    state: "Telangana",
     pincode: "",
-    phone: ""
+    phone: "",
+    deliveryNotes: ""
   });
-  const [orderId, setOrderId] = useState<number | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // Load saved customer details from localStorage for seamless repeat ordering
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("hdd_customer_info");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setAddress(prev => ({
+          ...prev,
+          fullName: parsed.fullName || "",
+          phone: parsed.phone || "",
+          pincode: parsed.pincode || "",
+          street: parsed.street || "",
+        }));
+        if (parsed.pincode && parsed.pincode.length === 6) {
+          setPincodeStatus(checkPincodeServiceability(parsed.pincode));
+        }
+      }
+    } catch (e) {}
+  }, []);
 
   // Read URL params for return callback payment errors
   useEffect(() => {
@@ -243,13 +269,13 @@ function CartContent() {
         </div>
         <h1 className="text-3xl font-playfair font-bold text-black mb-4">Your cart is empty</h1>
         <p className="text-black/60 mb-10 text-center max-w-md leading-relaxed">
-          Looks like you haven't added any premium seafood items yet. Explore our latest collections and shop for authentic delicacies.
+          Looks like you haven't added any fresh dairy items yet. Explore our pure farm milk, bilona A2 ghee, fresh paneer, and farmhouse curd.
         </p>
         <Link
           href="/"
           className="bg-brand text-white px-10 py-4 rounded-2xl font-bold tracking-widest uppercase text-sm hover:bg-brand-hover transition-all shadow-xl active:scale-95"
         >
-          Continue Shopping
+          Explore Fresh Dairy
         </Link>
       </div>
     );
@@ -259,46 +285,108 @@ function CartContent() {
   const shipping = 0;
   const total = Math.max(0, subtotal - discountAmount + shipping);
 
-  const handleCheckout = async () => {
-    setIsCheckoutModalOpen(true);
-    setPaymentStep("agreement");
+  const handlePincodeChange = (pin: string) => {
+    const cleanPin = pin.replace(/\D/g, "").slice(0, 6);
+    setAddress(prev => ({ ...prev, pincode: cleanPin }));
+    if (cleanPin.length === 6) {
+      const result = checkPincodeServiceability(cleanPin);
+      setPincodeStatus(result);
+    } else {
+      setPincodeStatus(null);
+    }
+  };
 
-    // Attempt to fetch saved addresses
-    setFetchingAddress(true);
+  const handleCheckout = () => {
+    setBookingSuccessData(null);
+    setIsCheckoutModalOpen(true);
+    if (address.pincode && address.pincode.length === 6) {
+      setPincodeStatus(checkPincodeServiceability(address.pincode));
+    }
+  };
+
+  const processCodOrder = async () => {
+    if (!pincodeStatus?.serviceable) {
+      alert("Please enter a valid Hyderabad delivery pincode to book your delivery.");
+      return;
+    }
+    if (!address.fullName.trim() || address.phone.length !== 10 || !address.street.trim()) {
+      alert("Please enter your name, 10-digit mobile number, and street address.");
+      return;
+    }
+
+    setIsProcessingPayment(true);
+
     try {
-      const res = await fetch("/api/profile/address");
+      const fullDeliveryAddress = `${address.street.trim()}${address.deliveryNotes ? ` (Instruction: ${address.deliveryNotes.trim()})` : ""}`;
+
+      const res = await fetch("/api/checkout/cod", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items,
+          totalAmount: total,
+          customerName: address.fullName.trim(),
+          customerPhone: address.phone.trim(),
+          pincode: address.pincode.trim(),
+          address: fullDeliveryAddress,
+          deliverySlot: "Tomorrow Morning 5:30 AM – 7:30 AM",
+          couponCode: appliedCoupon?.code || null,
+        }),
+      });
+
       const data = await res.json();
-      if (data.success && data.addresses && data.addresses.length > 0) {
-        setSavedAddresses(data.addresses);
-        setSelectedAddressIndex(0);
-        setShowNewAddressForm(false);
-      } else {
-        setSavedAddresses([]);
-        setShowNewAddressForm(true);
+      if (!data.success) {
+        alert("Booking failed: " + (data.error || "Please check details and try again."));
+        setIsProcessingPayment(false);
+        return;
       }
-    } catch (e) {
-      console.error("Failed to load saved addresses", e);
-      setShowNewAddressForm(true);
-    } finally {
-      setFetchingAddress(false);
+
+      // Save customer info in localStorage for repeat orders
+      try {
+        localStorage.setItem("hdd_customer_info", JSON.stringify({
+          fullName: address.fullName,
+          phone: address.phone,
+          pincode: address.pincode,
+          street: address.street,
+        }));
+      } catch (e) {}
+
+      // Open WhatsApp order chat immediately
+      if (data.whatsappUrl) {
+        window.open(data.whatsappUrl, "_blank");
+      }
+
+      setBookingSuccessData({
+        orderId: data.orderId,
+        whatsappUrl: data.whatsappUrl,
+        totalAmount: total,
+        deliverySlot: "Tomorrow Morning 5:30 AM – 7:30 AM",
+        customerName: address.fullName,
+        pincode: address.pincode,
+        areaName: pincodeStatus.areaName,
+      });
+
+      clearCart();
+      setIsProcessingPayment(false);
+    } catch (error) {
+      console.error("Error booking WhatsApp order:", error);
+      alert("Something went wrong booking your order. Please try again.");
+      setIsProcessingPayment(false);
     }
   };
 
   const processPhonePePayment = async () => {
     setIsProcessingPayment(true);
-    setPaymentStep("processing");
 
     try {
-      const shippingAddr = showNewAddressForm
-        ? `Name: ${address.fullName}, Street: ${address.street}, City: ${address.city}, State: ${address.state}, Pincode: ${address.pincode}, Contact: ${address.phone}`
-        : savedAddresses[selectedAddressIndex || 0];
+      const fullDeliveryAddress = `Name: ${address.fullName}, Street: ${address.street}, City: ${address.city}, State: ${address.state}, Pincode: ${address.pincode}, Contact: ${address.phone}`;
 
       const res = await fetch("/api/checkout/phonepe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items,
-          shippingAddress: shippingAddr,
+          shippingAddress: fullDeliveryAddress,
           couponCode: appliedCoupon?.code || null,
         }),
       });
@@ -306,7 +394,6 @@ function CartContent() {
       const data = await res.json();
       if (!data.success) {
         alert("Payment initialization failed: " + data.error);
-        setPaymentStep("details");
         setIsProcessingPayment(false);
         return;
       }
@@ -317,7 +404,6 @@ function CartContent() {
     } catch (error) {
       console.error("Error starting checkout:", error);
       alert("Something went wrong initializing PhonePe payment.");
-      setPaymentStep("details");
       setIsProcessingPayment(false);
     }
   };
@@ -392,20 +478,13 @@ function CartContent() {
                     <div>
                       <div className="flex items-center space-x-2 mb-1">
                         <h3 className="text-lg font-bold text-black leading-tight uppercase">{item.name.toUpperCase()}</h3>
-                        {isBespoke && (
-                          <div className="flex items-center space-x-1 px-2 py-0.5 bg-[#C5A059] text-white rounded-full">
-                            <Scissors size={10} />
-                            <span className="text-[8px] font-black uppercase tracking-widest">Bespoke</span>
-                          </div>
-                        )}
                       </div>
-                      <div className="flex flex-wrap justify-center sm:justify-start gap-3 mt-2">
-                        <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full flex items-center gap-1 ${isBespoke
-                          ? 'text-[#C5A059] bg-[#C5A059]/10 border border-[#C5A059]/20'
-                          : 'text-black/40 bg-brand/5'
-                          }`}>
-                          {isBespoke && <Sparkles size={10} />}
-                          Customized: {item.customizations?.type || "Standard"}
+                      <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full text-[#3B82C4] bg-[#3B82C4]/10 border border-[#3B82C4]/20">
+                          {item.size || "Standard Pack"}
+                        </span>
+                        <span className="text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full text-emerald-700 bg-emerald-50 border border-emerald-200">
+                          Fresh Farm Batch
                         </span>
                       </div>
                     </div>
@@ -676,329 +755,326 @@ function CartContent() {
 
             <button
               onClick={handleCheckout}
-              className="w-full bg-[#FFFDF6] text-[#8c6239] py-4 rounded-2xl font-bold tracking-[0.2em] uppercase text-[10px] hover:bg-[#FFFDF6]/90 transition-all shadow-xl flex items-center justify-center group active:scale-[0.98]"
+              className="w-full bg-[#25D366] hover:bg-[#20b858] text-white py-4 rounded-2xl font-black tracking-widest uppercase text-xs transition-all shadow-xl flex items-center justify-center group active:scale-[0.98] gap-2"
             >
-              Proceed to Checkout
-              <ArrowRight size={14} className="ml-3 group-hover:translate-x-1 transition-transform" />
+              <MessageCircle size={18} className="fill-white/20" />
+              <span>Book Order (WhatsApp &amp; COD)</span>
+              <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
             </button>
 
-            <div className="mt-6 flex items-center justify-center space-x-3 opacity-30">
-              <div className="text-[8px] uppercase tracking-[0.3em] font-black">Prepaid Only</div>
-              <div className="h-1 w-1 rounded-full bg-white"></div>
-              <div className="text-[8px] uppercase tracking-[0.3em] font-black">Safe Checkout</div>
+            <div className="mt-5 flex items-center justify-center space-x-3 text-black/50 text-[10px] font-bold tracking-wider">
+              <span>Pay on Delivery</span>
+              <div className="h-1 w-1 rounded-full bg-black/30"></div>
+              <span>5:30 AM – 7:30 AM Slot</span>
+              <div className="h-1 w-1 rounded-full bg-black/30"></div>
+              <span>Hyderabad Service</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Dummy Payment Modal */}
+      {/* Hyderabad Dairy Booking Modal */}
       {isCheckoutModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-brand-dark/40 backdrop-blur-md animate-in fade-in duration-300">
           <div
-            className="bg-white rounded-[2.5rem] w-full max-w-xl p-8 shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto no-scrollbar"
+            className="bg-white rounded-[2.5rem] w-full max-w-xl p-7 shadow-2xl relative overflow-hidden max-h-[92vh] overflow-y-auto no-scrollbar"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {paymentStep === "agreement" && (
-              <div className="animate-in slide-in-from-right-5 duration-300 py-2">
-                <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mb-6 text-amber-500 mx-auto">
-                  <AlertTriangle size={32} />
+            {bookingSuccessData ? (
+              <div className="py-6 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in-95 duration-300">
+                <div className="w-20 h-20 bg-emerald-100 text-[#25D366] rounded-full flex items-center justify-center mb-4 shadow-sm">
+                  <CheckCircle2 size={44} className="stroke-[2.5]" />
                 </div>
-                <h3 className="text-xl font-playfair font-bold text-black text-center mb-4">Store Policy Agreement</h3>
+                
+                <span className="px-3.5 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase tracking-widest rounded-full border border-emerald-200 mb-2">
+                  Order Logged • #{bookingSuccessData.orderId}
+                </span>
+                <h3 className="text-2xl font-playfair font-bold text-black mb-1">
+                  Dairy Delivery Booked!
+                </h3>
+                <p className="text-xs text-black/60 max-w-sm mb-6">
+                  We have logged your order for <span className="font-bold text-black">{bookingSuccessData.customerName}</span>. Your details have been sent to WhatsApp for instant confirmation.
+                </p>
 
-                <div className="space-y-4 bg-brand/5 p-6 rounded-3xl border border-brand/5 mb-8">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#C5A059] mt-2 flex-shrink-0" />
-                    <p className="text-xs font-bold text-black/70 leading-relaxed">
-                      Orders cannot be cancelled once the <span className="text-black font-black">packaging or dispatch process begins</span>.
-                    </p>
+                <div className="w-full bg-[#F4F8FC] border border-[#3B82C4]/20 rounded-2xl p-5 mb-6 text-left space-y-3">
+                  <div className="flex items-center justify-between text-xs pb-3 border-b border-[#3B82C4]/15">
+                    <span className="text-black/60 font-semibold">Morning Delivery Slot</span>
+                    <span className="font-extrabold text-[#3B82C4]">{bookingSuccessData.deliverySlot}</span>
                   </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#C5A059] mt-2 flex-shrink-0" />
-                    <p className="text-xs font-bold text-black/70 leading-relaxed">
-                      Amounts paid are <span className="text-black font-black">non-refundable for all items</span>.
-                    </p>
+                  <div className="flex items-center justify-between text-xs pb-3 border-b border-[#3B82C4]/15">
+                    <span className="text-black/60 font-semibold">Delivery Locality</span>
+                    <span className="font-bold text-black">{bookingSuccessData.pincode} {bookingSuccessData.areaName ? `(${bookingSuccessData.areaName})` : ''}</span>
                   </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#C5A059] mt-2 flex-shrink-0" />
-                    <p className="text-xs font-bold text-black/70 leading-relaxed">
-                      There is <span className="text-black font-black">no exchange or return option</span> for any purchase.
-                    </p>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-black/60 font-semibold">Total to Pay (On Arrival)</span>
+                    <span className="text-base font-extrabold text-black">₹{bookingSuccessData.totalAmount.toLocaleString()}</span>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-4">
-                  <button
-                    onClick={() => setPaymentStep("address")}
-                    className="w-full py-4 bg-brand text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-hover shadow-xl transition-all active:scale-95"
+                <div className="w-full space-y-3">
+                  <a
+                    href={bookingSuccessData.whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-4 bg-[#25D366] hover:bg-[#20b858] text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
                   >
-                    I Agree & Proceed
-                  </button>
+                    <MessageCircle size={18} />
+                    <span>Open WhatsApp Chat with Dairy</span>
+                  </a>
                   <button
-                    onClick={() => setIsCheckoutModalOpen(false)}
-                    className="w-full py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black/40 hover:text-black transition-colors"
+                    onClick={() => {
+                      setIsCheckoutModalOpen(false);
+                      setBookingSuccessData(null);
+                      router.push("/");
+                    }}
+                    className="w-full py-3.5 border border-brand/20 hover:bg-brand/5 text-black/70 rounded-xl text-xs font-bold transition-all"
                   >
-                    Go Back
+                    Continue Shopping
                   </button>
                 </div>
               </div>
-            )}
-
-            {paymentStep === "address" && (
-              <div className="animate-in slide-in-from-right-5 duration-300">
-                <div className="flex items-center space-x-4 mb-8">
-                  <div className="p-3 bg-brand/5 rounded-2xl text-black">
-                    {fetchingAddress ? <Loader2 size={24} className="animate-spin" /> : <MapPin size={24} />}
+            ) : (
+              <div className="animate-in fade-in duration-300">
+                {/* Modal Header */}
+                <div className="flex items-start justify-between pb-4 border-b border-brand/10 mb-5">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-11 h-11 bg-blue-50 text-[#3B82C4] rounded-2xl flex items-center justify-center flex-shrink-0">
+                      <ShoppingBag size={22} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-black leading-tight">Book Fresh Morning Delivery</h3>
+                      <p className="text-xs text-black/50 font-medium mt-0.5">Hyderabad &amp; Secunderabad Morning Milk Run</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-black">Delivery Address</h3>
-                    <p className="text-[10px] text-black/40 font-black uppercase tracking-widest">
-                      {fetchingAddress ? "Looking for your saved address..." : "Where should we send your order?"}
-                    </p>
-                  </div>
+                  <button
+                    onClick={() => setIsCheckoutModalOpen(false)}
+                    className="p-1.5 text-black/40 hover:text-black hover:bg-brand/5 rounded-full transition-all"
+                  >
+                    <X size={20} />
+                  </button>
                 </div>
 
                 <div className="space-y-4">
-                  {!showNewAddressForm && savedAddresses.length > 0 ? (
-                    <div className="space-y-4">
-                      <div className="max-h-60 overflow-y-auto no-scrollbar space-y-3 pr-2">
-                        {savedAddresses.map((addr, idx) => (
-                          <div
-                            key={idx}
-                            onClick={() => setSelectedAddressIndex(idx)}
-                            className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedAddressIndex === idx
-                              ? 'border-[#C5A059] bg-[#C5A059]/5'
-                              : 'border-brand/10 hover:border-brand/30'
-                              }`}
-                          >
-                            <div className="flex items-start justify-between gap-3">
-                              <p className="text-sm font-medium text-black whitespace-pre-wrap break-words min-w-0">{addr}</p>
-                              {selectedAddressIndex === idx && <CheckCircle2 size={18} className="text-[#C5A059] flex-shrink-0 mt-1" />}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <button
-                        onClick={() => setShowNewAddressForm(true)}
-                        className="w-full py-4 border-2 border-dashed border-brand/20 rounded-xl text-xs font-bold text-black hover:bg-brand/5 transition-colors flex items-center justify-center gap-2"
-                      >
-                        <Plus size={16} /> Add New Address
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 gap-4">
-                      {savedAddresses.length > 0 && (
-                        <button
-                          onClick={() => setShowNewAddressForm(false)}
-                          className="text-xs font-bold text-black hover:underline self-start mb-2 flex items-center gap-2"
-                        >
-                          &larr; Back to saved addresses
-                        </button>
+                  {/* Step 1: Pincode Check (The Core Requirement) */}
+                  <div className="bg-[#FAFBFD] rounded-2xl p-4 border border-brand/15 shadow-sm">
+                    <label className="block text-xs font-black uppercase tracking-wider text-black mb-2 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <MapPin size={14} className="text-[#3B82C4]" />
+                        <span>1. Delivery Pincode <span className="text-red-500">*</span></span>
+                      </span>
+                      <span className="text-[10px] text-black/40 font-bold uppercase">Hyderabad Network</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        maxLength={6}
+                        value={address.pincode}
+                        onChange={(e) => handlePincodeChange(e.target.value)}
+                        placeholder="Enter 6-digit Pincode (e.g. 500032, 500081, 500034)"
+                        className="w-full bg-white border-2 border-brand/20 rounded-xl py-3 px-4 text-sm font-bold text-black focus:outline-none focus:border-[#3B82C4] transition-all tracking-wider"
+                      />
+                      {address.pincode.length === 6 && (
+                        <div className="absolute right-3.5 top-1/2 -translate-y-1/2">
+                          {pincodeStatus?.serviceable ? (
+                            <CheckCircle2 size={20} className="text-emerald-500" />
+                          ) : (
+                            <AlertTriangle size={20} className="text-rose-500" />
+                          )}
+                        </div>
                       )}
-                      <div className="space-y-1.5">
-                        <label className="text-[10px] font-black text-black/40 uppercase tracking-widest ml-1">Full Name</label>
+                    </div>
+
+                    {/* Pincode Feedback Card */}
+                    {address.pincode.length === 6 && pincodeStatus && (
+                      <div className={`mt-3 p-3.5 rounded-xl border flex items-start space-x-3 animate-in fade-in duration-200 ${
+                        pincodeStatus.serviceable
+                          ? "bg-emerald-50/80 border-emerald-200 text-emerald-900"
+                          : "bg-rose-50 border-rose-200 text-rose-900"
+                      }`}>
+                        {pincodeStatus.serviceable ? (
+                          <CheckCircle2 size={18} className="text-emerald-600 flex-shrink-0 mt-0.5" />
+                        ) : (
+                          <AlertTriangle size={18} className="text-rose-600 flex-shrink-0 mt-0.5" />
+                        )}
+                        <div className="text-xs">
+                          {pincodeStatus.serviceable ? (
+                            <>
+                              <p className="font-black text-emerald-800">
+                                Delivery Available in {pincodeStatus.areaName}!
+                              </p>
+                              <p className="text-emerald-700 font-medium mt-0.5">
+                                Morning Slot: Tomorrow 5:30 AM – 7:30 AM • FREE Fresh Delivery
+                              </p>
+                            </>
+                          ) : (
+                            <>
+                              <p className="font-black text-rose-800">
+                                Unable to serve pincode {address.pincode}
+                              </p>
+                              <p className="text-rose-700 font-medium mt-0.5">
+                                We currently deliver across Greater Hyderabad &amp; Secunderabad (500xxx pincodes). For special inquiries, call <a href="tel:+919876543210" className="underline font-bold">+91 98765 43210</a>.
+                              </p>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {address.pincode.length < 6 && (
+                      <p className="text-[11px] text-black/50 font-medium mt-2">
+                        Serving Gachibowli, Madhapur, Jubilee Hills, Banjara Hills, Kukatpally, Secunderabad &amp; all 500xxx pincodes.
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Step 2: Customer Details */}
+                  <div className="bg-white rounded-2xl p-4 border border-brand/15 shadow-sm space-y-3">
+                    <h4 className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                      <Phone size={14} className="text-[#3B82C4]" />
+                      <span>2. Customer &amp; Delivery Details</span>
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-black/60 uppercase">Full Name *</label>
                         <input
                           type="text"
                           required
                           value={address.fullName}
                           onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
-                          className="w-full bg-brand/5 border border-brand/5 rounded-xl py-3 px-4 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-brand-accent/20 transition-all"
-                          placeholder="John Doe"
+                          placeholder="e.g. Rajesh Kumar"
+                          className="w-full bg-[#F8FAFC] border border-brand/15 rounded-xl py-2.5 px-3.5 text-xs font-bold text-black focus:outline-none focus:border-[#3B82C4] focus:bg-white"
                         />
                       </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[10px] font-black text-black/40 uppercase tracking-widest ml-1">Street / Apartment / Landmark</label>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-black/60 uppercase">WhatsApp Mobile No *</label>
                         <input
-                          type="text"
+                          type="tel"
+                          maxLength={10}
                           required
-                          value={address.street}
-                          onChange={(e) => setAddress({ ...address, street: e.target.value })}
-                          className="w-full bg-brand/5 border border-brand/5 rounded-xl py-3 px-4 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-brand-accent/20 transition-all"
-                          placeholder="123 Boutique Lane, Suite 4B"
+                          value={address.phone}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                            setAddress({ ...address, phone: val });
+                          }}
+                          placeholder="10-digit number"
+                          className="w-full bg-[#F8FAFC] border border-brand/15 rounded-xl py-2.5 px-3.5 text-xs font-bold text-black focus:outline-none focus:border-[#3B82C4] focus:bg-white"
                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1.5">
-                          <label className="text-[10px] font-black text-black/40 uppercase tracking-widest ml-1">City</label>
-                          <input
-                            type="text"
-                            required
-                            value={address.city}
-                            onChange={(e) => setAddress({ ...address, city: e.target.value })}
-                            className="w-full bg-brand/5 border border-brand/5 rounded-xl py-3 px-4 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-brand-accent/20 transition-all"
-                            placeholder="Mumbai"
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <label className="text-[10px] font-black text-black/40 uppercase tracking-widest ml-1">State</label>
-                          <input
-                            type="text"
-                            required
-                            value={address.state}
-                            onChange={(e) => setAddress({ ...address, state: e.target.value })}
-                            className="w-full bg-brand/5 border border-brand/5 rounded-xl py-3 px-4 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-brand-accent/20 transition-all"
-                            placeholder="Maharashtra"
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1.5">
-                          <label className="text-[10px] font-black text-black/40 uppercase tracking-widest ml-1">Pincode</label>
-                          <input
-                            type="text"
-                            required
-                            maxLength={6}
-                            value={address.pincode}
-                            onChange={(e) => {
-                              const val = e.target.value.replace(/\D/g, '').slice(0, 6);
-                              setAddress({ ...address, pincode: val });
-                            }}
-                            className="w-full bg-brand/5 border border-brand/5 rounded-xl py-3 px-4 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-brand-accent/20 transition-all"
-                            placeholder="6 Digits"
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <label className="text-[10px] font-black text-black/40 uppercase tracking-widest ml-1">Contact Phone</label>
-                          <input
-                            type="text"
-                            required
-                            maxLength={10}
-                            value={address.phone}
-                            onChange={(e) => {
-                              const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                              setAddress({ ...address, phone: val });
-                            }}
-                            className="w-full bg-brand/5 border border-brand/5 rounded-xl py-3 px-4 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-brand-accent/20 transition-all"
-                            placeholder="10 Digits"
-                          />
-                        </div>
-                      </div>
                     </div>
-                  )}
 
-                  <div className="flex gap-4 pt-4">
-                    <button
-                      onClick={() => setIsCheckoutModalOpen(false)}
-                      className="flex-1 py-4 border-2 border-brand/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-black/40 hover:bg-brand/5 transition-all"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      disabled={
-                        showNewAddressForm
-                          ? (!address.fullName || !address.street || !address.city || address.pincode.length !== 6 || address.phone.length !== 10)
-                          : selectedAddressIndex === null
-                      }
-                      onClick={() => setPaymentStep("details")}
-                      className="flex-[2] py-4 bg-brand text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-brand-hover shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Proceed to Payment
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {paymentStep === "details" && (
-              <div className="animate-in slide-in-from-right-5 duration-300">
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="p-3 bg-brand/5 rounded-2xl text-black">
-                    <CreditCard size={24} />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-black">Secure Payment Gateway</h3>
-                    <p className="text-[10px] text-black/40 font-black uppercase tracking-widest">Select Payment Gateway</p>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  {/* PhonePe PG Card Selection */}
-                  <div className="border border-brand/20 bg-white p-4 rounded-2xl shadow-sm flex items-center justify-between cursor-pointer ring-2 ring-brand/30">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-[#5f259f]/10 text-[#5f259f] rounded-xl flex items-center justify-center font-bold text-lg">
-                        <CreditCard size={20} />
-                      </div>
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm font-bold text-black">PhonePe Gateway</span>
-                          <span className="text-[9px] bg-green-100 text-green-700 font-extrabold px-2 py-0.5 rounded-full uppercase">Primary</span>
-                        </div>
-                        <p className="text-[10px] text-black/50 font-medium mt-0.5">UPI, Credit/Debit Cards, NetBanking & Wallets</p>
-                      </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-black/60 uppercase">Flat / House No, Street, Apartment, Landmark *</label>
+                      <input
+                        type="text"
+                        required
+                        value={address.street}
+                        onChange={(e) => setAddress({ ...address, street: e.target.value })}
+                        placeholder="e.g. Flat 304, Fortune Residency, Near Police Station"
+                        className="w-full bg-[#F8FAFC] border border-brand/15 rounded-xl py-2.5 px-3.5 text-xs font-bold text-black focus:outline-none focus:border-[#3B82C4] focus:bg-white"
+                      />
                     </div>
-                    <div className="w-5 h-5 rounded-full border-2 border-[#5f259f] flex items-center justify-center bg-[#5f259f]">
-                      <div className="w-2 h-2 rounded-full bg-white" />
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-black/60 uppercase">Delivery Instruction (Optional)</label>
+                      <input
+                        type="text"
+                        value={address.deliveryNotes}
+                        onChange={(e) => setAddress({ ...address, deliveryNotes: e.target.value })}
+                        placeholder="e.g. Leave milk packet in basket outside door / ring bell"
+                        className="w-full bg-[#F8FAFC] border border-brand/15 rounded-xl py-2 px-3.5 text-xs font-medium text-black focus:outline-none focus:border-[#3B82C4] focus:bg-white"
+                      />
                     </div>
                   </div>
 
-                  <div className="bg-brand/5 p-6 rounded-3xl border border-brand/5 space-y-4">
-                    <div className="flex justify-between items-center text-xs font-bold text-black/60">
-                      <span>Subtotal</span>
-                      <span>₹{subtotal.toLocaleString()}</span>
+                  {/* Step 3: Order Breakdown */}
+                  <div className="bg-[#F8FAFC] rounded-2xl p-4 border border-brand/10 space-y-2">
+                    <div className="flex justify-between items-center text-xs text-black/70 font-semibold">
+                      <span>Cart Items ({getTotalItems()})</span>
+                      <span className="font-bold text-black">₹{subtotal.toLocaleString()}</span>
                     </div>
                     {discountAmount > 0 && (
-                      <div className="flex justify-between items-center text-xs font-bold text-green-600">
-                        <span>Discount Applied ({appliedCoupon?.code})</span>
+                      <div className="flex justify-between items-center text-xs text-emerald-600 font-bold">
+                        <span>Discount ({appliedCoupon?.code})</span>
                         <span>- ₹{discountAmount.toLocaleString()}</span>
                       </div>
                     )}
-                    <div className="flex justify-between items-center text-xs font-bold text-black/60">
-                      <span>Shipping</span>
-                      <span>Free</span>
+                    <div className="flex justify-between items-center text-xs text-black/70 font-semibold">
+                      <span>Morning Delivery (5:30 AM – 7:30 AM)</span>
+                      <span className="text-emerald-600 font-extrabold uppercase">FREE</span>
                     </div>
-
-                    <div className="border-t border-brand/10 pt-4 flex justify-between items-center">
-                      <span className="text-[10px] font-black text-black uppercase tracking-widest">Grand Total</span>
-                      <span className="text-xl font-black text-black tracking-widest">₹{total.toLocaleString()}</span>
-                    </div>
-
-                    <div className="flex items-center space-x-2 text-[10px] font-bold text-green-600 bg-green-50 px-3 py-2 rounded-xl border border-green-100">
-                      <ShieldCheck size={14} />
-                      <span>256-Bit Bank Level Encryption</span>
+                    <div className="border-t border-brand/10 pt-2 flex justify-between items-center">
+                      <span className="text-xs font-black uppercase tracking-wider text-black">Total to Pay (On Delivery)</span>
+                      <span className="text-xl font-black text-black">₹{total.toLocaleString()}</span>
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 pt-2">
                     <button
+                      type="button"
                       disabled={isProcessingPayment}
                       onClick={() => setIsCheckoutModalOpen(false)}
-                      className="flex-1 py-4 border-2 border-brand/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-black/40 hover:bg-brand/5 transition-all disabled:opacity-50"
+                      className="flex-1 py-3.5 border border-brand/20 hover:bg-brand/5 text-black/60 rounded-xl text-xs font-bold uppercase tracking-wider transition-all"
                     >
                       Cancel
                     </button>
-                    <button
-                      disabled={isProcessingPayment}
-                      onClick={processPhonePePayment}
-                      className="flex-[2] py-4 bg-[#5f259f] hover:bg-[#4a1c7d] text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-                    >
-                      {isProcessingPayment ? (
-                        <>
-                          <Loader2 size={16} className="animate-spin text-white" />
-                          <span>Redirecting...</span>
-                        </>
-                      ) : (
-                        <span>Pay via PhonePe</span>
-                      )}
-                    </button>
+
+                    {/* Dynamic Book Button */}
+                    {(() => {
+                      const isPinChecked = address.pincode.length === 6;
+                      const isServiceable = pincodeStatus?.serviceable;
+                      const isFormValid = isPinChecked && isServiceable && address.fullName.trim() && address.phone.length === 10 && address.street.trim();
+
+                      if (!isPinChecked) {
+                        return (
+                          <button
+                            type="button"
+                            disabled
+                            className="flex-[2] py-3.5 bg-gray-200 text-gray-500 rounded-xl text-xs font-black uppercase tracking-wider cursor-not-allowed"
+                          >
+                            Enter 6-Digit Pincode
+                          </button>
+                        );
+                      }
+
+                      if (!isServiceable) {
+                        return (
+                          <button
+                            type="button"
+                            disabled
+                            className="flex-[2] py-3.5 bg-rose-100 text-rose-500 rounded-xl text-xs font-black uppercase tracking-wider cursor-not-allowed"
+                          >
+                            Unable to Serve Pincode
+                          </button>
+                        );
+                      }
+
+                      return (
+                        <button
+                          type="button"
+                          disabled={!isFormValid || isProcessingPayment}
+                          onClick={processCodOrder}
+                          className="flex-[2] py-3.5 bg-[#25D366] hover:bg-[#20b858] disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-white rounded-xl text-xs font-black uppercase tracking-wider shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
+                        >
+                          {isProcessingPayment ? (
+                            <>
+                              <Loader2 size={16} className="animate-spin text-white" />
+                              <span>Booking Delivery...</span>
+                            </>
+                          ) : (
+                            <>
+                              <MessageCircle size={16} className="fill-white/20" />
+                              <span>Confirm &amp; Book on WhatsApp</span>
+                            </>
+                          )}
+                        </button>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>
             )}
-
-            {paymentStep === "processing" && (
-              <div className="py-20 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-500">
-                <div className="relative mb-10">
-                  <div className="w-24 h-24 border-4 border-brand-accent/20 rounded-full"></div>
-                  <div className="absolute inset-0 w-24 h-24 border-4 border-brand-accent border-t-transparent rounded-full animate-spin"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <ShieldCheck size={32} className="text-black-accent animate-pulse" />
-                  </div>
-                </div>
-                <h3 className="text-2xl font-playfair font-bold text-black mb-2">Processing Payment</h3>
-                <p className="text-[10px] text-black/40 font-black uppercase tracking-widest">Verifying with your bank...</p>
-              </div>
-            )}
-
-
           </div>
         </div>
       )}

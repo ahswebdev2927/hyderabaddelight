@@ -2,29 +2,29 @@ import React from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 export const metadata = {
-  title: "Terms and Conditions - Dry Fish Basket",
-  description: "Read the official Terms of Use and Agreement for Dry Fish Basket.",
+  title: "Terms and Conditions - Hyderabad Delight Dairy",
+  description: "Read the official Terms of Use and Agreement for Hyderabad Delight Dairy.",
 };
 
 export default function TermsConditions() {
   return (
-    <main className="min-h-screen bg-[#FAF6ED] text-[#3b2314] font-sans selection:bg-[#8c6239]/20 pb-24">
+    <main className="min-h-screen bg-[#F4F8FC] text-[#1E242B] font-sans selection:bg-[#3B82C4]/20 pb-24">
       <div className="max-w-4xl mx-auto px-6 pt-16 pb-12">
-        <h1 className="text-3xl md:text-5xl font-serif font-black text-[#8c6239] mb-2 tracking-wide">
+        <h1 className="text-3xl md:text-5xl font-serif font-black text-[#1E242B] mb-2 tracking-wide">
           Terms and Conditions
         </h1>
-        <p className="text-xs uppercase tracking-widest font-black text-[#8c6239]/60 mb-2">TERMS OF USE</p>
-        <p className="text-xs text-black/50 mb-10">Last updated July 23, 2020</p>
+        <p className="text-xs uppercase tracking-widest font-black text-[#3B82C4] mb-2">TERMS OF USE &bull; ESTD 2008</p>
+        <p className="text-xs text-black/50 mb-10">Last updated: 2026</p>
 
-        <div className="space-y-8 text-sm text-black/85 leading-relaxed font-medium bg-white p-8 md:p-12 rounded-3xl border border-[#8c6239]/10 shadow-sm">
+        <div className="space-y-8 text-sm text-black/85 leading-relaxed font-medium bg-white p-8 md:p-12 rounded-3xl border border-[#3B82C4]/15 shadow-sm">
           
           {/* Section 1: AGREEMENT TO TERMS */}
           <div className="space-y-3">
-            <h2 className="text-xl font-serif font-bold text-[#8c6239]">
+            <h2 className="text-xl font-serif font-bold text-[#3B82C4]">
               AGREEMENT TO TERMS
             </h2>
             <p>
-              These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity (&quot;you&quot;) and Dry Fish Basket (&quot;Company&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;), concerning your access to and use of the <a href="https://www.vkdryfishbasket.com" target="_blank" rel="noopener noreferrer" className="text-[#8c6239] hover:underline font-semibold">https://www.vkdryfishbasket.com/</a> website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the &quot;Site&quot;). You agree that by accessing the Site, you have read, understood, and agreed to be bound by all of these Terms of Use. IF YOU DO NOT AGREE WITH ALL OF THESE TERMS OF USE, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SITE AND YOU MUST DISCONTINUE USE IMMEDIATELY.
+              These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity (&quot;you&quot;) and Hyderabad Delight Dairy (&quot;Company&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;), concerning your access to and use of the <a href="https://www.hyderabaddelightdairy.com" target="_blank" rel="noopener noreferrer" className="text-[#3B82C4] hover:underline font-semibold">https://www.hyderabaddelightdairy.com/</a> website as well as any other media form, mobile website or application related or connected thereto (collectively, the &quot;Site&quot;). You agree that by accessing the Site, you have read, understood, and agreed to be bound by all of these Terms of Use.
             </p>
             <p>
               Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to make changes or modifications to these Terms of Use at any time and for any reason. We will alert you about any changes by updating the &quot;Last updated&quot; date of these Terms of Use, and you waive any right to receive specific notice of each such change. It is your responsibility to periodically review these Terms of Use to stay informed of updates. You will be subject to, and will be deemed to have been made aware of and to have accepted, the changes in any revised Terms of Use by your continued use of the Site after the date such revised Terms of Use are posted.
@@ -257,7 +257,7 @@ export default function TermsConditions() {
               PRIVACY POLICY
             </h2>
             <p>
-              We care about data privacy and security. Please review our Privacy Policy: <a href="https://www.vkdryfishbasket.com/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-[#8c6239] hover:underline font-semibold">https://www.vkdryfishbasket.com/privacy-policy</a>. By using the Site or the Marketplace Offerings, you agree to be bound by our Privacy Policy, which is incorporated into these Terms of Use. Please be advised the Site and the Marketplace Offerings are hosted in India. If you access the Site or the Marketplace Offerings from any other region of the world with laws or other requirements governing personal data collection, use, or disclosure that differ from applicable laws in India, then through your continued use of the Site, you are transferring your data to India, and you expressly consent to have your data transferred to and processed in India.
+              We care about data privacy and security. Please review our Privacy Policy: <a href="/privacy-policy" className="text-[#3B82C4] hover:underline font-semibold">Privacy Policy</a>. By using the Site, you agree to be bound by our Privacy Policy, which is incorporated into these Terms of Use.
             </p>
           </div>
 
@@ -293,7 +293,7 @@ export default function TermsConditions() {
               GOVERNING LAW
             </h2>
             <p>
-              These terms shall be governed by and defined following the laws of India. Dry Fish Basket and yourself irrevocably consent that the courts of India shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms.
+              These terms shall be governed by and defined following the laws of India. Hyderabad Delight Dairy and yourself irrevocably consent that the courts of Hyderabad, Telangana shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms.
             </p>
           </div>
 
@@ -400,19 +400,19 @@ export default function TermsConditions() {
               CONTACT US
             </h2>
             <p>In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at:</p>
-            <ul className="space-y-2.5 font-semibold text-[#3b2314]">
-              <li className="font-bold text-[#8c6239] text-base">Dry Fish Basket</li>
+            <ul className="space-y-2.5 font-semibold text-[#1E242B]">
+              <li className="font-bold text-[#3B82C4] text-base">Hyderabad Delight Dairy</li>
               <li className="flex items-center gap-2.5">
-                <Mail size={16} className="text-[#8c6239]" />
-                <span>Email: <a href="mailto:info@vkdryfishbasket.com" className="text-[#8c6239] hover:underline font-bold">info@vkdryfishbasket.com</a></span>
+                <Mail size={16} className="text-[#3B82C4]" />
+                <span>Email: <a href="mailto:care@hyderabaddelightdairy.com" className="text-[#3B82C4] hover:underline font-bold">care@hyderabaddelightdairy.com</a></span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone size={16} className="text-[#8c6239]" />
-                <span>Phone: <a href="tel:+919848357279" className="text-[#8c6239] hover:underline font-bold">+91 98483 57279</a></span>
+                <Phone size={16} className="text-[#3B82C4]" />
+                <span>Phone: <a href="tel:+919876543210" className="text-[#3B82C4] hover:underline font-bold">+91 98765 43210</a></span>
               </li>
               <li className="flex items-start gap-2.5">
-                <MapPin size={16} className="text-[#8c6239] shrink-0 mt-0.5" />
-                <span>Address: vk dryfish basket unit, Door number: 107 _A, Ramalayam temple, Nimmakuru(old), Krishna District, Andhra Pradesh</span>
+                <MapPin size={16} className="text-[#3B82C4] shrink-0 mt-0.5" />
+                <span>Address: Hyderabad Delight Dairy Farms, Plot 42, Gachibowli, Hyderabad, Telangana - 500032</span>
               </li>
             </ul>
           </div>

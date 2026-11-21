@@ -2,30 +2,30 @@ import React from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 export const metadata = {
-  title: "Privacy Policy - Dry Fish Basket",
-  description: "Read the official Privacy Policy of Dry Fish Basket.",
+  title: "Privacy Policy - Hyderabad Delight Dairy",
+  description: "Read the official Privacy Policy of Hyderabad Delight Dairy.",
 };
 
 export default function PrivacyPolicy() {
   return (
-    <main className="min-h-screen bg-[#FAF6ED] text-[#3b2314] font-sans selection:bg-[#8c6239]/20 pb-24">
+    <main className="min-h-screen bg-[#F4F8FC] text-[#1E242B] font-sans selection:bg-[#3B82C4]/20 pb-24">
       <div className="max-w-4xl mx-auto px-6 pt-16 pb-12">
-        <h1 className="text-3xl md:text-5xl font-serif font-black text-[#8c6239] mb-10 tracking-wide">
+        <h1 className="text-3xl md:text-5xl font-serif font-black text-[#1E242B] mb-10 tracking-wide">
           Privacy Policy
         </h1>
 
-        <div className="space-y-8 text-sm text-black/85 leading-relaxed font-medium bg-white p-8 md:p-12 rounded-3xl border border-[#8c6239]/10 shadow-sm">
+        <div className="space-y-8 text-sm text-black/85 leading-relaxed font-medium bg-white p-8 md:p-12 rounded-3xl border border-[#3B82C4]/15 shadow-sm">
           
           <p>
-            Dry Fish Basket, accessible from <a href="https://www.vkdryfishbasket.com" target="_blank" rel="noopener noreferrer" className="text-[#8c6239] hover:underline font-semibold">vkdryfishbasket.com</a>, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by vkdryfishbasket.com and how we use it.
+            At <strong>Hyderabad Delight Dairy</strong>, accessible from <a href="https://www.hyderabaddelightdairy.com" target="_blank" rel="noopener noreferrer" className="text-[#3B82C4] hover:underline font-semibold">hyderabaddelightdairy.com</a>, one of our main priorities is the privacy of our customers and visitors. This Privacy Policy document outlines the types of information collected and how we protect it.
           </p>
 
           <p>
-            If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.
+            If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact our team.
           </p>
 
           <p>
-            This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in vkdryfishbasket.com. This policy is not applicable to any information collected offline or via channels other than this website.
+            This Privacy Policy applies to all online ordering and customer management activities across hyderabaddelightdairy.com.
           </p>
 
           {/* Section 1: Consent */}
@@ -77,7 +77,7 @@ export default function PrivacyPolicy() {
               Log Files
             </h2>
             <p>
-              vkdryfishbasket.com follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services&apos; analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users&apos; movement on the website, and gathering demographic information.
+              hyderabaddelightdairy.com follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services&apos; analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users&apos; movement on the website, and gathering demographic information.
             </p>
           </div>
 
@@ -87,13 +87,13 @@ export default function PrivacyPolicy() {
               Advertising Partners Privacy Policies
             </h2>
             <p>
-              You may consult this list to find the Privacy Policy for each of the advertising partners of vkdryfishbasket.com.
+              You may consult this list to find the Privacy Policy for each of the advertising partners of hyderabaddelightdairy.com.
             </p>
             <p>
-              Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on vkdryfishbasket.com, which are sent directly to users&apos; browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.
+              Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on hyderabaddelightdairy.com, which are sent directly to users&apos; browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.
             </p>
             <p>
-              Note that vkdryfishbasket.com has no access to or control over these cookies that are used by third-party advertisers.
+              Note that hyderabaddelightdairy.com has no access to or control over these cookies that are used by third-party advertisers.
             </p>
           </div>
 
@@ -103,7 +103,7 @@ export default function PrivacyPolicy() {
               Third Party Privacy Policies
             </h2>
             <p>
-              vkdryfishbasket.com&apos;s Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options.
+              hyderabaddelightdairy.com&apos;s Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options.
             </p>
             <p>
               You can choose to disable cookies through your individual browser options. To know more detailed information about cookie management with specific web browsers, it can be found at the browsers&apos; respective websites.
@@ -150,28 +150,28 @@ export default function PrivacyPolicy() {
               Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity.
             </p>
             <p>
-              vkdryfishbasket.com does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.
+              hyderabaddelightdairy.com does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.
             </p>
           </div>
 
           {/* Contact Footer */}
-          <div className="space-y-3 border-t border-[#8c6239]/10 pt-6">
-            <h2 className="text-xl font-serif font-bold text-[#8c6239]">
+          <div className="space-y-3 border-t border-black/10 pt-6">
+            <h2 className="text-xl font-serif font-bold text-[#3B82C4]">
               Contact Us
             </h2>
             <p>If you have any questions or concerns about our Privacy Policy, please reach out to us:</p>
-            <ul className="space-y-2.5 font-semibold text-[#3b2314]">
+            <ul className="space-y-2.5 font-semibold text-[#1E242B]">
               <li className="flex items-center gap-2.5">
-                <Mail size={16} className="text-[#8c6239]" />
-                <span>Email: <a href="mailto:info@vkdryfishbasket.com" className="text-[#8c6239] hover:underline font-bold">info@vkdryfishbasket.com</a></span>
+                <Mail size={16} className="text-[#3B82C4]" />
+                <span>Email: <a href="mailto:care@hyderabaddelightdairy.com" className="text-[#3B82C4] hover:underline font-bold">care@hyderabaddelightdairy.com</a></span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone size={16} className="text-[#8c6239]" />
-                <span>Phone: <a href="tel:+919848357279" className="text-[#8c6239] hover:underline font-bold">+91 98483 57279</a></span>
+                <Phone size={16} className="text-[#3B82C4]" />
+                <span>Phone: <a href="tel:+919876543210" className="text-[#3B82C4] hover:underline font-bold">+91 98765 43210</a></span>
               </li>
               <li className="flex items-start gap-2.5">
-                <MapPin size={16} className="text-[#8c6239] shrink-0 mt-0.5" />
-                <span>Address: vk dryfish basket unit, Door number: 107 _A, Ramalayam temple, Nimmakuru(old), Krishna District, Andhra Pradesh</span>
+                <MapPin size={16} className="text-[#3B82C4] shrink-0 mt-0.5" />
+                <span>Address: Hyderabad Delight Dairy Farms, Plot 42, Gachibowli, Hyderabad, Telangana - 500032</span>
               </li>
             </ul>
           </div>

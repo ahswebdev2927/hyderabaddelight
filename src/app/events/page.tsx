@@ -502,8 +502,8 @@ export default function EventsPage() {
       if (data.success) {
         showToast("✓ Registered! Opening WhatsApp...");
         
-        // Formulate WhatsApp message to send to 6364936047
-        const formattedMsg = `Hello Dry Fish Basket! I have registered for the event:
+        // Formulate WhatsApp message to send
+        const formattedMsg = `Hello Hyderabad Delight Dairy! I have registered for the event:
 *Event:* ${selectedEvent.title}
 *Date:* ${selectedEvent.date}
 *Time:* ${selectedEvent.time}
@@ -543,11 +543,11 @@ ${regNotes ? `*Notes:* ${regNotes}` : ""}`;
             <Sparkles size={12} className="animate-spin text-black-accent" />
             <span>Exclusive Gatherings</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-playfair font-black text-black tracking-tight leading-tight">
-            <span className="text-black-accent">Dry Fish Basket</span> Events
+          <h1 className="text-4xl md:text-6xl font-playfair font-black text-black tracking-tight leading-tight">
+            <span className="text-[#3B82C4]">Hyderabad Delight Dairy</span> Events &amp; Farm Tours
           </h1>
           <p className="max-w-2xl mx-auto text-brand-dark/70 text-base md:text-lg font-medium leading-relaxed">
-            Experience fashion runways, masterclass workshops, screening events, and vibrant outdoor gatherings designed to inspire network connection and creativity.
+            Experience organic farm visits, cattle petting tours, and traditional bilona ghee-making workshops in Hyderabad.
           </p>
         </div>
       </section>

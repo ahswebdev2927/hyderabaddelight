@@ -95,12 +95,10 @@ export default function WishlistPage() {
     checkAuthAndFetch();
   }, [fetchWishlist]);
 
-  // Redirect to login if user is not authenticated after store is loaded
+  // Wishlist is paused/commented out - redirect visitors smoothly to home
   useEffect(() => {
-    if (isLoaded && !isAuthenticated) {
-      router.push(`/login?redirect=${encodeURIComponent("/wishlist")}`);
-    }
-  }, [isLoaded, isAuthenticated, router]);
+    router.replace("/");
+  }, [router]);
 
   // Fetch product variations when "Move to Bag" is clicked
   const handleOpenMoveModal = async (item: { productId: number; name: string; imageUrl: string; price: number }) => {

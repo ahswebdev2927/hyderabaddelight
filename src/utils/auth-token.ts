@@ -6,7 +6,7 @@ const FIREBASE_JWKS = createRemoteJWKSet(
 );
 
 function getSessionSecretKey(): Uint8Array {
-  const secret = process.env.FIREBASE_PRIVATE_KEY || process.env.SESSION_SECRET || "dry-fish-basket-secure-session-key-2026";
+  const secret = process.env.FIREBASE_PRIVATE_KEY || process.env.SESSION_SECRET || "hyderabad-delight-dairy-secure-session-key-2026";
   return new TextEncoder().encode(secret);
 }
 
@@ -15,7 +15,7 @@ function getSessionSecretKey(): Uint8Array {
  */
 export async function verifyFirebaseIdToken(idToken: string): Promise<{ phone: string; uid?: string } | null> {
   try {
-    const projectId = process.env.FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "dry-fish-bas";
+    const projectId = process.env.FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "hyderabad-delight-dairy";
     const { payload } = await jwtVerify(idToken, FIREBASE_JWKS, {
       issuer: `https://securetoken.google.com/${projectId}`,
       audience: projectId,

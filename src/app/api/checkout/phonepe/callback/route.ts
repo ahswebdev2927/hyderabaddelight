@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { getPhonePeClient } from "@/utils/phonepe";
 
 export async function GET(req: Request) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.vkdryfishbasket.com";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
   try {
     const { searchParams } = new URL(req.url);

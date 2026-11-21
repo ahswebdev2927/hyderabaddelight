@@ -248,7 +248,7 @@ function MyOrdersContent() {
                         <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest px-2 py-0.5 bg-white/5 rounded-full border border-white/5">#AS-{order.id}</span>
                       </div>
                       <h4 className="text-lg font-bold text-white leading-tight">
-                        Dry Fish Basket Order
+                        Hyderabad Delight Dairy Order
                       </h4>
                     </div>
                   </div>

@@ -90,9 +90,10 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // 3. Protect Cart Route 
-  if (pathname.startsWith("/cart") && !userSession) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  // 3. Cart Route - Accessible to all (Guest checkout with WhatsApp booking enabled)
+  // (Customer login check disconnected per requirement)
+  if (pathname.startsWith("/cart")) {
+    return NextResponse.next();
   }
 
   return NextResponse.next();

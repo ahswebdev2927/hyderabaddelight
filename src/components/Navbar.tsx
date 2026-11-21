@@ -160,29 +160,29 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-[#FAF6ED] border-b border-[#8c6239]/10 shadow-sm font-serif">
+      <header className="sticky top-0 z-50 w-full bg-white border-b border-[#3B82C4]/15 shadow-sm font-serif">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
 
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center mr-2 sm:mr-4 md:mr-8">
               <Link href="/" className="flex items-center gap-2 group">
-                <div className="h-10 sm:h-11 w-auto flex items-center justify-center bg-transparent group-hover:scale-105 transition-transform duration-300">
+                <div className="h-10 sm:h-12 w-auto flex items-center justify-center bg-transparent group-hover:scale-105 transition-transform duration-300">
                   <img
-                    src="/logo_fin.png"
-                    alt="Dry Fish Basket Logo"
-                    className="h-full w-auto object-contain"
+                    src="/logo.jpg"
+                    alt="Hyderabad Delight Dairy Logo"
+                    className="h-full w-auto object-contain rounded-md"
                   />
                 </div>
-                <span className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-[#3b2314] tracking-wide hover:text-[#8c6239] transition-colors translate-y-[0.5px]">
-                  Dry Fish Basket
+                <span className="font-serif text-lg sm:text-xl md:text-2xl font-bold text-[#1E242B] tracking-wide hover:text-[#3B82C4] transition-colors translate-y-[0.5px]">
+                  Hyderabad Delight Dairy
                 </span>
               </Link>
             </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-6 ml-4 font-serif">
-              <Link href="/" className="text-[#3b2314] hover:text-[#8c6239] text-base font-medium tracking-wide transition-colors">
+              <Link href="/" className="text-[#1E242B] hover:text-[#3B82C4] text-base font-medium tracking-wide transition-colors">
                 Home
               </Link>
               
@@ -190,14 +190,14 @@ export default function Navbar() {
               <div className="relative group">
                 <button
                   type="button"
-                  className="flex items-center gap-1 text-[#3b2314] hover:text-[#8c6239] text-base font-medium tracking-wide transition-colors py-2 cursor-pointer"
+                  className="flex items-center gap-1 text-[#1E242B] hover:text-[#3B82C4] text-base font-medium tracking-wide transition-colors py-2 cursor-pointer"
                 >
-                  <span>Collections</span>
-                  <ChevronDown size={15} className="transition-transform duration-200 group-hover:rotate-180 text-[#8c6239]" />
+                  <span>Categories</span>
+                  <ChevronDown size={15} className="transition-transform duration-200 group-hover:rotate-180 text-[#3B82C4]" />
                 </button>
 
                 {/* Dropdown Menu Popup */}
-                <div className="absolute top-full left-0 w-60 bg-[#FAF6ED] border border-[#8c6239]/20 shadow-xl rounded-2xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top-left scale-95 group-hover:scale-100">
+                <div className="absolute top-full left-0 w-60 bg-white border border-[#3B82C4]/20 shadow-xl rounded-2xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top-left scale-95 group-hover:scale-100">
                   <div className="py-1">
                     {categories.length === 0 ? (
                       <div className="px-4 py-2.5 text-xs text-black/50 italic">No Collections Available</div>
@@ -239,38 +239,42 @@ export default function Navbar() {
               </Link>
             </nav>
 
-            <div className="hidden md:flex items-center space-x-4 ml-auto text-[#3b2314]">
+            <div className="hidden md:flex items-center space-x-4 ml-auto text-[#1E242B]">
               {/* Search Icon triggers modal */}
               <Link
                 href="/search"
                 aria-label="Search"
-                className="hover:text-[#8c6239] transition-colors p-2 cursor-pointer outline-none"
+                className="hover:text-[#3B82C4] transition-colors p-2 cursor-pointer outline-none"
               >
                 <Search className="h-5 w-5" />
               </Link>
 
+              {/* Wishlist Link - commented out for now
               <Link
                 href={user ? "/wishlist" : `/login?redirect=${encodeURIComponent(pathname)}`}
                 aria-label="Wishlist"
-                className="hover:text-[#8c6239] transition-colors relative p-2 cursor-pointer"
+                className="hover:text-[#3B82C4] transition-colors relative p-2 cursor-pointer"
               >
                 <Heart className="h-5 w-5" />
                 {user && wishlistItems.length > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-[#8c6239] text-white text-[11px] font-sans font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center shadow-sm">
+                  <span className="absolute -top-0.5 -right-0.5 bg-[#3B82C4] text-white text-[11px] font-sans font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center shadow-sm">
                     {wishlistItems.length}
                   </span>
                 )}
               </Link>
+              */}
 
-              <Link href={user ? "/cart" : "/login"} aria-label="Cart" className="hover:text-[#8c6239] transition-colors relative p-2">
+              {/* Cart Link - Direct access for all customers */}
+              <Link href="/cart" aria-label="Cart" className="hover:text-[#3B82C4] transition-colors relative p-2">
                 <ShoppingCart className="h-5 w-5" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-[#8c6239] text-white text-[11px] font-sans font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center shadow-sm">
+                  <span className="absolute -top-0.5 -right-0.5 bg-[#3B82C4] text-white text-[11px] font-sans font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center shadow-sm">
                     {cartCount}
                   </span>
                 )}
               </Link>
 
+              {/* Customer Login / Profile - disconnected for now
               {user ? (
                 <ProfileDropdown
                   user={user}
@@ -280,40 +284,47 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   aria-label="Login"
-                  className="hover:text-[#8c6239] transition-colors relative p-2 cursor-pointer"
+                  className="hover:text-[#3B82C4] transition-colors relative p-2 cursor-pointer"
                 >
                   <User className="h-5 w-5" />
                 </Link>
               )}
+              */}
             </div>
 
             {/* Mobile menu button */}
             <div className="flex md:hidden items-center space-x-1 sm:space-x-2">
-              <Link href="/search" aria-label="Search" className="text-[#3b2314] hover:text-[#8c6239] p-1.5 sm:p-2 transition-colors">
+              <Link href="/search" aria-label="Search" className="text-[#1E242B] hover:text-[#3B82C4] p-1.5 sm:p-2 transition-colors">
                 <Search className="h-5 w-5" />
               </Link>
+
+              {/* Mobile Wishlist - commented out for now
               <Link
                 href={user ? "/wishlist" : `/login?redirect=${encodeURIComponent(pathname)}`}
                 aria-label="Wishlist"
-                className="text-[#3b2314] hover:text-[#8c6239] transition-colors relative p-1.5 sm:p-2 cursor-pointer"
+                className="text-[#1E242B] hover:text-[#3B82C4] transition-colors relative p-1.5 sm:p-2 cursor-pointer"
               >
                 <Heart className="h-5 w-5" />
                 {user && wishlistItems.length > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-[#8c6239] text-white text-[10px] font-sans font-bold min-w-[16px] h-[16px] px-1 rounded-full flex items-center justify-center shadow-sm">
+                  <span className="absolute -top-0.5 -right-0.5 bg-[#3B82C4] text-white text-[10px] font-sans font-bold min-w-[16px] h-[16px] px-1 rounded-full flex items-center justify-center shadow-sm">
                     {wishlistItems.length}
                   </span>
                 )}
               </Link>
+              */}
 
-              <Link href={user ? "/cart" : "/login"} aria-label="Cart" className="text-[#3b2314] hover:text-[#8c6239] transition-colors relative p-1.5 sm:p-2">
+              {/* Mobile Cart - Direct access */}
+              <Link href="/cart" aria-label="Cart" className="text-[#1E242B] hover:text-[#3B82C4] transition-colors relative p-1.5 sm:p-2">
                 <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -top-0.5 -right-0.5 bg-[#8c6239] text-white text-[10px] font-sans font-bold min-w-[16px] h-[16px] px-1 rounded-full flex items-center justify-center shadow-sm">
-                  {cartCount}
-                </span>
+                {cartCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 bg-[#3B82C4] text-white text-[10px] font-sans font-bold min-w-[16px] h-[16px] px-1 rounded-full flex items-center justify-center shadow-sm">
+                    {cartCount}
+                  </span>
+                )}
               </Link>
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-[#3b2314] hover:text-[#8c6239] focus:outline-none p-1.5 sm:p-2 transition-colors cursor-pointer"
+                className="text-[#1E242B] hover:text-[#3B82C4] focus:outline-none p-1.5 sm:p-2 transition-colors cursor-pointer"
               >
                 {isMobileMenuOpen ? (
                   <X className="h-6 w-6" />
@@ -332,12 +343,12 @@ export default function Navbar() {
             <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 bg-black/95 backdrop-blur-md border-b border-white/10 shrink-0">
               <div className="flex items-center gap-2.5">
                 <img
-                  src="/logo_fin.png"
-                  alt="Dry Fish Basket Logo"
-                  className="h-8 w-8 object-contain rounded-full bg-white/10 p-0.5"
+                  src="/logo.jpg"
+                  alt="Hyderabad Delight Dairy Logo"
+                  className="h-9 w-9 object-contain rounded-full bg-white p-0.5"
                 />
                 <span className="font-serif text-base font-bold text-white tracking-wide">
-                  Dry Fish Basket
+                  Hyderabad Delight Dairy
                 </span>
               </div>
               <button
@@ -422,15 +433,13 @@ export default function Navbar() {
                 </Link>
               </div>
 
+              {/* Account Section - disconnected for now
               <div className="border-t border-white/15" />
-
-              {/* Account Section */}
               <div className="space-y-3">
                 <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-white opacity-80">Account</h3>
 
                 {user ? (
                   <div className="space-y-2">
-                    {/* User Info Header in Sidebar */}
                     <div className="flex items-center space-x-3 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 mb-3">
                       <div className="w-8 h-8 rounded-full bg-[#FFFDF6] flex items-center justify-center text-[#064e3b] text-xs font-black shadow-sm">
                         {user.fullName ? user.fullName.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 1) : "U"}
@@ -493,6 +502,7 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
+              */}
 
             </div>
           </div>
@@ -509,7 +519,7 @@ export default function Navbar() {
               </div>
               <h3 className="text-xl font-playfair font-bold text-black mb-2">Log out</h3>
               <p className="text-black/60 text-sm mb-8 leading-relaxed">
-                Are you sure you want to log out from Dry Fish Basket? You'll need to verify your phone number to sign in again.
+                Are you sure you want to log out from Hyderabad Delight Dairy? You'll need to verify your phone number to sign in again.
               </p>
 
               <div className="w-full space-y-3">
@@ -539,11 +549,10 @@ export default function Navbar() {
 
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
-      {/* Wishlist Sidebar Drawer Overlay */}
+      {/* Wishlist Sidebar Drawer Overlay - commented out for now
       <AnimatePresence>
         {isWishlistOpen && (
           <div className="fixed inset-0 z-[100] flex justify-end">
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.5 }}
@@ -552,7 +561,6 @@ export default function Navbar() {
               className="absolute inset-0 bg-black cursor-pointer"
             />
 
-            {/* Drawer Body */}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -560,10 +568,9 @@ export default function Navbar() {
               transition={{ type: "tween", duration: 0.3 }}
               className="relative w-full max-w-md bg-[#FFFDF6] h-full shadow-2xl flex flex-col z-10"
             >
-              {/* Header */}
               <div className="p-6 border-b border-brand/5 flex items-center justify-between bg-brand/5">
                 <div className="flex items-center space-x-2 text-black">
-                  <Heart className="h-5 w-5 fill-[#064e3b] text-[#064e3b]" />
+                  <Heart className="h-5 w-5 fill-[#3B82C4] text-[#3B82C4]" />
                   <span className="font-playfair text-lg font-bold">My Wishlist ({wishlistItems.length})</span>
                 </div>
                 <button
@@ -574,7 +581,6 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {/* Content */}
               <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
                 {wishlistItems.length === 0 ? (
                   <div className="text-center py-20 text-black/35">
@@ -585,7 +591,7 @@ export default function Navbar() {
                         setIsWishlistOpen(false);
                         router.push("/");
                       }}
-                      className="mt-6 text-xs font-black uppercase tracking-widest bg-[#eab308] text-[#064e3b] px-6 py-3 rounded-xl hover:bg-brand-hover transition shadow-md cursor-pointer"
+                      className="mt-6 text-xs font-black uppercase tracking-widest bg-[#3B82C4] text-white px-6 py-3 rounded-xl hover:bg-[#2B6CB0] transition shadow-md cursor-pointer"
                     >
                       Explore Collections
                     </button>
@@ -596,7 +602,6 @@ export default function Navbar() {
                       key={item.productId}
                       className="flex items-center justify-between p-3 bg-brand/5 border border-brand/5 rounded-2xl group transition-all hover:bg-brand/10"
                     >
-                      {/* Thumbnail and Info */}
                       <Link
                         href={`/product/${item.productId}`}
                         onClick={() => setIsWishlistOpen(false)}
@@ -613,21 +618,20 @@ export default function Navbar() {
                           <p className="text-xs font-black text-black uppercase tracking-wider truncate mb-0.5">
                             {item.name}
                           </p>
-                          <p className="text-[10px] text-[#064e3b] font-bold uppercase tracking-widest mb-1">
+                          <p className="text-[10px] text-[#3B82C4] font-bold uppercase tracking-widest mb-1">
                             {item.category}
                           </p>
-                          <p className="text-xs font-bold text-[#064e3b]">
+                          <p className="text-xs font-bold text-[#3B82C4]">
                             ₹{item.price.toLocaleString()}
                           </p>
                         </div>
                       </Link>
 
-                      {/* Actions */}
                       <div className="flex items-center space-x-2">
                         <Link
                           href={`/product/${item.productId}`}
                           onClick={() => setIsWishlistOpen(false)}
-                          className="px-3 py-2 bg-[#C5A059] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#B38E46] transition shadow-sm"
+                          className="px-3 py-2 bg-[#E5A93C] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#d4972e] transition shadow-sm"
                         >
                           Shop
                         </Link>
@@ -647,6 +651,7 @@ export default function Navbar() {
           </div>
         )}
       </AnimatePresence>
+      */}
     </>
   );
 }

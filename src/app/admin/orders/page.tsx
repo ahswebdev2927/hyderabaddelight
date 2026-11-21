@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ShoppingBag, Clock, CheckCircle2, Truck, Loader2, User, Phone, Ruler, ChevronDown, ChevronUp, Sparkles, Scissors, MapPin, CreditCard, X } from "lucide-react";
+import { ShoppingBag, Clock, CheckCircle2, Truck, Loader2, User, Phone, Ruler, ChevronDown, ChevronUp, Sparkles, Scissors, MapPin, CreditCard, X, MessageCircle } from "lucide-react";
 
 interface OrderItem {
   id: number;
@@ -242,7 +242,7 @@ export default function AdminOrders() {
     <div className="pb-20 px-8 pt-8 font-inter">
       <div className="mb-10 text-center flex flex-col items-center">
         <h1 className="text-4xl font-playfair font-bold text-black">Order Fulfillment</h1>
-        <p className="mt-2 text-black/60 font-medium">Track and manage customer purchases and custom fits.</p>
+        <p className="mt-2 text-black/60 font-medium">Track and manage fresh milk and dairy deliveries across Hyderabad.</p>
       </div>
 
       <div className="mb-10 flex justify-center">
@@ -352,7 +352,7 @@ export default function AdminOrders() {
           </div>
           <h3 className="text-2xl font-playfair font-bold text-black mb-2">{searchTerm ? "No matching orders" : "No orders to display"}</h3>
           <p className="text-black/60 font-medium max-w-sm mx-auto">
-            {searchTerm ? "Adjust your search filters to find what you are looking for." : "When customers start placing orders for their custom-fit apparel, they will appear here."}
+            {searchTerm ? "Adjust your search filters to find what you are looking for." : "When customers place orders for fresh milk and dairy, they will appear here."}
           </p>
         </div>
       ) : (
@@ -444,9 +444,22 @@ export default function AdminOrders() {
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-bold text-black/40 uppercase">Phone</span>
-                          <span className="text-xs font-black text-black flex items-center gap-1">
-                            <Phone size={10} /> {order.customerPhone}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-black text-black flex items-center gap-1">
+                              <Phone size={10} /> {order.customerPhone}
+                            </span>
+                            {order.customerPhone && (
+                              <a
+                                href={`https://wa.me/91${order.customerPhone.replace(/\D/g, '').slice(-10)}?text=${encodeURIComponent(`Hello ${order.customerName || "Customer"}, this is regarding your Hyderabad Delight Dairy Order #${order.id}...`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="px-2 py-0.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold flex items-center gap-1 border border-emerald-200 transition-colors"
+                              >
+                                <MessageCircle size={10} /> WhatsApp
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </div>
 

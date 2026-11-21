@@ -1,5 +1,6 @@
+// Admin authorization helper with phone validation
 import { cookies } from "next/headers";
-import { isAdminPhone } from "@/utils/admin-helper";
+import { isAdminPhone, getAdminPhones } from "@/utils/admin-helper";
 import { verifySessionToken } from "@/utils/auth-token";
 
 export interface DecodedAdminToken {
@@ -42,7 +43,8 @@ export async function verifyAdminRequest(request?: Request): Promise<DecodedAdmi
     }
 
     const phone = verified.phone;
-    if (!isAdminPhone(phone)) {
+    const isAllowed = isAdminPhone(phone);
+    if (!isAllowed) {
       console.warn(`[Security] Unauthorized admin access attempt from phone: ${phone}`);
       return null;
     }

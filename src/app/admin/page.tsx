@@ -90,7 +90,7 @@ export default function AdminDashboard() {
         <h1 className="text-4xl font-playfair font-bold text-black">Dashboard Overview</h1>
         <p className="mt-2 text-black/60 font-medium tracking-tight flex items-center justify-center">
           <Sparkles size={16} className="text-[#C5A059] mr-2" />
-          Welcome back to the Dry Fish Basket management hub.
+          Welcome back to the Hyderabad Delight Dairy management hub.
         </p>
       </div>
 

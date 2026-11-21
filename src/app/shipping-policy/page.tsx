@@ -1,72 +1,66 @@
 import React from "react";
 
 export const metadata = {
-  title: "Shipping Policy / Delivery Policy - Dry Fish Basket",
-  description: "Read the official Shipping and Delivery Policy of Dry Fish Basket.",
+  title: "Delivery & Morning Shipping Policy - Hyderabad Delight Dairy",
+  description: "Read the official Morning Delivery and Freshness Handling Policy of Hyderabad Delight Dairy.",
 };
 
 export default function ShippingPolicyPage() {
   return (
-    <main className="min-h-screen bg-[#FAF6ED] text-[#3b2314] font-sans selection:bg-[#8c6239]/20 pb-24">
+    <main className="min-h-screen bg-[#F4F8FC] text-[#1E242B] font-sans selection:bg-[#3B82C4]/20 pb-24">
       <div className="max-w-4xl mx-auto px-6 pt-16 pb-12">
-        <h1 className="text-3xl md:text-5xl font-serif font-black text-[#8c6239] mb-10 tracking-wide">
-          Shipping Policy
+        <h1 className="text-3xl md:text-5xl font-serif font-black text-[#1E242B] mb-10 tracking-wide">
+          Morning Delivery &amp; Shipping Policy
         </h1>
 
-        <div className="space-y-8 text-sm text-black/85 leading-relaxed font-medium bg-white p-8 md:p-12 rounded-3xl border border-[#8c6239]/10 shadow-sm">
+        <div className="space-y-8 text-sm text-black/85 leading-relaxed font-medium bg-white p-8 md:p-12 rounded-3xl border border-[#3B82C4]/15 shadow-sm">
           
-          {/* Section 1: Shipment processing time */}
+          {/* Section 1: Morning Delivery Slots */}
           <div className="space-y-3">
-            <h2 className="text-xl font-serif font-bold text-[#8c6239]">
-              Shipment processing time
+            <h2 className="text-xl font-serif font-bold text-[#3B82C4]">
+              Daily Morning Delivery Hours
             </h2>
-            <p>All orders within India will be delivered within 3-7 business days.</p>
-            <p>All International shipments will be delivered as per the destination, please reach out to our customer support for additional details.</p>
-            <p>All sweets, snacks, pickles, and special food items require 1 day preparation so that the orders will be delayed by 1 day.</p>
+            <p>All daily milk and fresh perishable dairy orders placed before <strong>9:00 PM</strong> are harvested, chilled, and delivered between <strong>5:30 AM and 7:30 AM</strong> the following morning across Hyderabad.</p>
+            <p>Ghee, paneer, and artisanal butter can be ordered either as part of your regular morning dairy slot or scheduled for doorstep evening delivery.</p>
           </div>
 
-          {/* Section 2: Shipment confirmation and order tracking */}
-          <div className="space-y-3 border-t border-[#8c6239]/10 pt-6">
-            <h2 className="text-xl font-serif font-bold text-[#8c6239]">
-              Shipment confirmation and order tracking
+          {/* Section 2: Coverage Areas in Hyderabad */}
+          <div className="space-y-3 border-t border-black/10 pt-6">
+            <h2 className="text-xl font-serif font-bold text-[#3B82C4]">
+              Delivery Coverage in Hyderabad
             </h2>
-            <p>We use multiple services based on your delivery location, once after our shipment has started you will receive emails and mobile notification about shipment tracking.</p>
+            <p>We serve all major residential corridors in Hyderabad and Secunderabad, including:</p>
+            <ul className="list-disc pl-5 space-y-1 text-black/75">
+              <li>Jubilee Hills, Banjara Hills, Film Nagar</li>
+              <li>Gachibowli, Madhapur, Hitec City, Kondapur, Financial District</li>
+              <li>Kukatpally, KPHB Colony, Miyapur, Nizampet</li>
+              <li>Secunderabad, Begumpet, Somajiguda, Ameerpet</li>
+              <li>Manikonda, Narsingi, Tellapur, Kokapet</li>
+            </ul>
           </div>
 
-          {/* Section 3: Customs, duties, and taxes */}
-          <div className="space-y-3 border-t border-[#8c6239]/10 pt-6">
-            <h2 className="text-xl font-serif font-bold text-[#8c6239]">
-              Customs, duties, and taxes
+          {/* Section 3: Cold-Chain Temperature Maintenance */}
+          <div className="space-y-3 border-t border-black/10 pt-6">
+            <h2 className="text-xl font-serif font-bold text-[#3B82C4]">
+              Cold-Chain Temperature Maintenance
             </h2>
-            <p>All custom duties and taxes should be paid by the customer. We do not take any responsibility for the same.</p>
+            <p>Our transport vehicles utilize insulated, food-grade temperature-controlled crates to ensure that all fresh milk and paneer are kept strictly below 4°C right up to your doorstep. Please refrigerate products immediately upon receipt.</p>
           </div>
 
-          {/* Section 4: Damages */}
-          <div className="space-y-3 border-t border-[#8c6239]/10 pt-6">
-            <h2 className="text-xl font-serif font-bold text-[#8c6239]">
-              Damages
+          {/* Section 4: Delivery Fees & Free Delivery */}
+          <div className="space-y-3 border-t border-black/10 pt-6">
+            <h2 className="text-xl font-serif font-bold text-[#3B82C4]">
+              Delivery Charges
             </h2>
-            <p>Any damages during the shipment is not our concern, however every shipment has been insured by the specified amount which customers can pay while check out and will be able to claim the insured amount. All damages should be reported with photo or video proof within 24 hours of delivery.</p>
+            <p>Morning dairy deliveries are completely <strong>FREE</strong> for active subscription plans and all one-time orders above ₹199.</p>
           </div>
 
-          {/* Section 5: International Shipping Policy */}
-          <div className="space-y-3 border-t border-[#8c6239]/10 pt-6">
-            <h2 className="text-xl font-serif font-bold text-[#8c6239]">
-              International Shipping Policy
+          {/* Section 5: Contact & Support */}
+          <div className="space-y-3 border-t border-black/10 pt-6">
+            <h2 className="text-xl font-serif font-bold text-[#3B82C4]">
+              Delivery Queries &amp; Doorstep Instructions
             </h2>
-            <p>At Dry Fish Basket we do not import or export any goods from India to any other countries. You may place the order online for international countries through our partners but Dry Fish Basket is not liable for shipment of your goods. You may contact the vendor directly on <a href="mailto:info@vkdryfishbasket.com" className="text-[#8c6239] hover:underline font-semibold">info@vkdryfishbasket.com</a> further to any queries all the import and export duties should be borne by you only.</p>
-          </div>
-
-          {/* Section 6: Incorrect Address or Contact Information */}
-          <div className="space-y-3 border-t border-[#8c6239]/10 pt-6">
-            <h2 className="text-xl font-serif font-bold text-[#8c6239]">
-              Incorrect Address or Contact Information
-            </h2>
-            <p>The customer is solely responsible for providing a complete, accurate, and deliverable shipping address along with a valid contact number at the time of placing the order.</p>
-            <p>If the customer provides an incorrect, incomplete, invalid, or unreachable contact number, or an incorrect, incomplete, or undeliverable shipping address, and the shipment cannot be successfully delivered, no further delivery attempts shall be made by Dry Fish Basket or its logistics partners.</p>
-            <p>In such cases, the shipment will be returned to the designated warehouse or return facility. The customer may request re-dispatch of the same shipment to a corrected address only after payment of all applicable re-shipping, handling, storage, and administrative charges as determined by Dry Fish Basket.</p>
-            <p>No refund, replacement, exchange, cancellation, credit note, or compensation shall be provided for orders returned due to incorrect or incomplete customer-provided information. Any products that are perishable, food-related, or have limited shelf life may become ineligible for re-dispatch at the sole discretion of Dry Fish Basket.</p>
-            <p>Dry Fish Basket shall not be held liable for any loss, damage, delay, deterioration of product quality, or additional expenses arising from incorrect customer-provided contact details or shipping information.</p>
+            <p>If you have specific apartment security instructions (e.g., leave in doorstep milk bag, ring doorbell, gate security clearance), please specify during checkout or message our morning dispatch helpline at <a href="tel:+919876543210" className="text-[#3B82C4] font-bold hover:underline">+91 98765 43210</a> or email <a href="mailto:care@hyderabaddelightdairy.com" className="text-[#3B82C4] font-bold hover:underline">care@hyderabaddelightdairy.com</a>.</p>
           </div>
 
         </div>

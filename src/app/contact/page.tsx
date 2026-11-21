@@ -46,23 +46,26 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-[85vh] bg-[#F4E2C7] py-12 md:py-16 px-4 sm:px-6 font-sans">
+    <main className="min-h-[85vh] bg-[#F4F8FC] py-12 md:py-16 px-4 sm:px-6 font-sans">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-playfair font-bold text-center text-[#2C1D11] mb-8 md:mb-10">
-          Contact
+        <h1 className="text-3xl md:text-4xl font-playfair font-bold text-center text-[#1E242B] mb-2">
+          Contact Hyderabad Delight Dairy
         </h1>
+        <p className="text-center text-xs md:text-sm text-black/60 mb-8 md:mb-10">
+          Have a question about daily morning milk delivery, Bilona ghee, or bulk dairy orders? Reach out to our team below.
+        </p>
 
         {submitted ? (
-          <div className="bg-[#FAF7F0] p-8 md:p-10 rounded-2xl text-center shadow-sm border border-[#E8D9C0] max-w-xl mx-auto">
-            <h2 className="text-2xl font-playfair font-bold text-[#2C1D11] mb-3">
+          <div className="bg-white p-8 md:p-10 rounded-3xl text-center shadow-sm border border-[#3B82C4]/20 max-w-xl mx-auto">
+            <h2 className="text-2xl font-playfair font-bold text-[#1E242B] mb-3">
               Thank You!
             </h2>
-            <p className="text-[#6B5340] text-sm leading-relaxed mb-6">
-              Your message has been sent successfully. We will get back to you as soon as possible.
+            <p className="text-black/70 text-sm leading-relaxed mb-6">
+              Your message has been sent to the Hyderabad Delight Dairy care team. We will get back to you shortly.
             </p>
             <button
               onClick={() => setSubmitted(false)}
-              className="bg-black text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-neutral-800 transition-colors"
+              className="bg-[#3B82C4] text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-[#2B6CB0] transition-colors"
             >
               Send Another Message
             </button>

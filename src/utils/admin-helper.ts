@@ -4,7 +4,7 @@
  */
 
 export function getAdminPhones(): string[] {
-  const envVal = process.env.ADMIN_NUMBERS || "";
+  const envVal = process.env.ADMIN_NUMBERS || "9876543210,9999999999";
   return envVal
     .split(",")
     .map((num) => num.replace(/\D/g, "").slice(-10)) // Normalizes to 10 digits

@@ -13,7 +13,7 @@ export default function AccessDenied() {
         
         <h1 className="text-4xl font-playfair font-bold text-black mb-4">Access Denied</h1>
         <p className="text-black/60 mb-10 leading-relaxed font-medium">
-          You do not have the required administrative permissions to access this area of Dry Fish Basket.
+          You do not have the required administrative permissions to access this area of Hyderabad Delight Dairy.
         </p>
 
         <div className="space-y-4">

@@ -1,4 +1,4 @@
-import LocationView from "@/components/LocationView";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -8,6 +8,6 @@ interface DryFishInCityPageProps {
 
 export default async function DryFishInCityPage({ params }: DryFishInCityPageProps) {
   const resolvedParams = (await params) || {};
-  const city = resolvedParams.city || "";
-  return <LocationView city={city} />;
+  const city = resolvedParams.city || "hyderabad";
+  redirect(`/location/${city}`);
 }
