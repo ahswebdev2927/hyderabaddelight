@@ -13,7 +13,7 @@ import {
   users,
 } from "./schema";
 
-async function seedDairy() {
+export async function seedDairy() {
   console.log("Starting Hyderabad Delight Dairy database seed...");
 
   try {
@@ -750,5 +750,7 @@ async function seedDairy() {
   }
 }
 
-seedDairy();
+if (process.argv[1]?.includes("seed-dairy")) {
+  seedDairy().catch(console.error);
+}
 

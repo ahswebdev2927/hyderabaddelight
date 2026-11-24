@@ -9,6 +9,7 @@ import CategoryCarousel from "@/components/CategoryCarousel";
 import ReviewsCarousel from "@/components/ReviewsCarousel";
 import HeroBanner from "@/components/HeroBanner";
 import { getFirstProductImageUrl, getProductImageUrls } from "@/utils/product";
+import { DEFAULT_DAIRY_CATEGORIES, DEFAULT_DAIRY_PRODUCTS } from "@/data/fallbackDairyData";
 
 type NavItem = {
   id: number;
@@ -55,11 +56,11 @@ export default function Home() {
 
   const [bannerUrl, setBannerUrl] = useState("");
   const [offers, setOffers] = useState<any[]>([]);
-  const [homepageCatCards, setHomepageCatCards] = useState<any[]>([]);
+  const [homepageCatCards, setHomepageCatCards] = useState<any[]>(DEFAULT_DAIRY_CATEGORIES);
   const [reviews, setReviews] = useState<any[]>([]);
   const [faqs, setFaqs] = useState<any[]>([]);
   const [founderPromoList, setFounderPromoList] = useState<any[]>([]);
-  const [latestProducts, setLatestProducts] = useState<any[]>([]);
+  const [latestProducts, setLatestProducts] = useState<any[]>(DEFAULT_DAIRY_PRODUCTS.slice(0, 8));
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -195,8 +196,8 @@ export default function Home() {
           fetch("/api/admin/settings?key=homepage_banner").then(res => res.json()).then(data => { if (data.success && data.data) setBannerUrl(data.data.value); }),
           fetch("/api/admin/offers").then(res => res.json()).then(data => { if (data.success) setOffers(data.data); }),
           fetch("/api/admin/reviews").then(res => res.json()).then(data => { if (data.success) setReviews(data.data || []); return data.data || []; }),
-          fetch("/api/products/latest").then(res => res.json()).then(data => { if (data.success) setLatestProducts(data.data || []); return data.data || []; }),
-          fetch("/api/admin/homepage-categories").then(res => res.json()).then(data => { if (data.success) setHomepageCatCards(data.data); return data.data || []; }),
+          fetch("/api/products/latest").then(res => res.json()).then(data => { if (data.success && Array.isArray(data.data) && data.data.length > 0) setLatestProducts(data.data); return data.data || []; }),
+          fetch("/api/admin/homepage-categories").then(res => res.json()).then(data => { if (data.success && Array.isArray(data.data) && data.data.length > 0) setHomepageCatCards(data.data); return data.data || []; }),
           fetch("/api/admin/faqs").then(res => res.json()).then(data => { if (data.success) setFaqs(data.data || []); }),
           fetch("/api/admin/settings?key=founder_promo").then(res => res.json()).then(data => {
             if (data.success && data.data) {
